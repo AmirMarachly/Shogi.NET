@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shogi", "Shogi\Shogi.csproj", "{AE3E65D6-24DC-4621-9A14-9FD0C3BFEB34}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE3E65D6-24DC-4621-9A14-9FD0C3BFEB34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE3E65D6-24DC-4621-9A14-9FD0C3BFEB34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE3E65D6-24DC-4621-9A14-9FD0C3BFEB34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE3E65D6-24DC-4621-9A14-9FD0C3BFEB34}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7C2937D0-CC03-4170-8B7D-0ED9F43709E7}
+	EndGlobalSection
+EndGlobal
