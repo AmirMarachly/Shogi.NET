@@ -26,12 +26,19 @@ namespace Shogi.ViewModel
             Kyosha,
             Narikyo,
             Fuhyo,
-            Tokin
+            Tokin,
+            Empty
         }
 
-        private ObservableCollection<Tuple<Piece, int, int>> grid;
+        public struct Cell
+        {
+            public Piece piece;
+            public bool isSente;
+        }
 
-        public ObservableCollection<Tuple<Piece, int, int>> Grid
+        private ObservableCollection<Cell> grid;
+
+        public ObservableCollection<Cell> Grid
         {
             get
             {
@@ -47,8 +54,7 @@ namespace Shogi.ViewModel
 
         public ShogiViewModel()
         {
-            ObservableCollection<Tuple<Piece, int, int>> newGrid 
-                = new ObservableCollection<Tuple<Piece, int, int>>();
+            ObservableCollection<Cell> newGrid = new ObservableCollection<Cell>();
 
             Array pieces = Enum.GetValues(typeof(Piece));
             Random random = new Random();
@@ -58,7 +64,7 @@ namespace Shogi.ViewModel
                 for (int j = 0; j < 9; ++j)
                 {
                     Piece newPiece = (Piece) pieces.GetValue(random.Next(pieces.Length));
-                    newGrid.Add(Tuple.Create(newPiece, i, j));
+                    newGrid.Add(new Cell() {piece = newPiece, isSente = random.Next(2) == 0});
                 }
             }
 

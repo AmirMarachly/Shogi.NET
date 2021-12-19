@@ -13,9 +13,10 @@ namespace Shogi.View
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is ShogiViewModel.Piece)
+            if (value is ShogiViewModel.Cell)
             {
-                return $"/Shogi;component/Resources/{value}.png";
+                ShogiViewModel.Cell cell = (ShogiViewModel.Cell) value;
+                return $"/Shogi;component/Resources/{cell.piece}{(cell.isSente ? "Sente" : "Gote")}.png";
             }
 
             return "";

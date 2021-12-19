@@ -9,67 +9,139 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Fuhyo.png" />
-    <None Remove="Resources\Ginsho.png" />
-    <None Remove="Resources\Gyokusho.png" />
-    <None Remove="Resources\Hisha.png" />
-    <None Remove="Resources\Kakugyo.png" />
-    <None Remove="Resources\Keima.png" />
-    <None Remove="Resources\Kinsho.png" />
-    <None Remove="Resources\Kyosha.png" />
-    <None Remove="Resources\Narigin.png" />
-    <None Remove="Resources\Narikei.png" />
-    <None Remove="Resources\Narikyo.png" />
-    <None Remove="Resources\Osho.png" />
-    <None Remove="Resources\Ryuma.png" />
-    <None Remove="Resources\Ryuo.png" />
-    <None Remove="Resources\Tokin.png" />
+    <None Remove="Resources\Background.jpg" />
+    <None Remove="Resources\EmptyGote.png" />
+    <None Remove="Resources\EmptySente.png" />
+    <None Remove="Resources\FuhyoGote.png" />
+    <None Remove="Resources\FuhyoSente.png" />
+    <None Remove="Resources\GinshoGote.png" />
+    <None Remove="Resources\GinshoSente.png" />
+    <None Remove="Resources\GyokushoGote.png" />
+    <None Remove="Resources\GyokushoSente.png" />
+    <None Remove="Resources\HishaGote.png" />
+    <None Remove="Resources\HishaSente.png" />
+    <None Remove="Resources\KakugyoGote.png" />
+    <None Remove="Resources\KakugyoSente.png" />
+    <None Remove="Resources\KeimaGote.png" />
+    <None Remove="Resources\KeimaSente.png" />
+    <None Remove="Resources\KinshoGote.png" />
+    <None Remove="Resources\KinshoSente.png" />
+    <None Remove="Resources\KyoshaGote.png" />
+    <None Remove="Resources\KyoshaSente.png" />
+    <None Remove="Resources\NariginGote.png" />
+    <None Remove="Resources\NariginSente.png" />
+    <None Remove="Resources\NarikeiGote.png" />
+    <None Remove="Resources\NarikeiSente.png" />
+    <None Remove="Resources\NarikyoGote.png" />
+    <None Remove="Resources\NarikyoSente.png" />
+    <None Remove="Resources\OshoGote.png" />
+    <None Remove="Resources\OshoSente.png" />
+    <None Remove="Resources\RyumaGote.png" />
+    <None Remove="Resources\RyumaSente.png" />
+    <None Remove="Resources\RyuoGote.png" />
+    <None Remove="Resources\RyuoSente.png" />
+    <None Remove="Resources\TokinGote.png" />
+    <None Remove="Resources\TokinSente.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Fuhyo.png">
+    <Resource Include="Resources\Background.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Ginsho.png">
+    <Resource Include="Resources\EmptyGote.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Gyokusho.png">
+    <Resource Include="Resources\EmptySente.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Hisha.png">
+    <Resource Include="Resources\FuhyoGote.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Kakugyo.png">
+    <Resource Include="Resources\FuhyoSente.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Keima.png">
+    <Resource Include="Resources\GinshoGote.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Kinsho.png">
+    <Resource Include="Resources\GinshoSente.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Kyosha.png">
+    <Resource Include="Resources\GyokushoGote.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Narigin.png">
+    <Resource Include="Resources\GyokushoSente.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Narikei.png">
+    <Resource Include="Resources\HishaGote.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Narikyo.png">
+    <Resource Include="Resources\HishaSente.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Osho.png">
+    <Resource Include="Resources\KakugyoGote.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Ryuma.png">
+    <Resource Include="Resources\KakugyoSente.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Ryuo.png">
+    <Resource Include="Resources\KeimaGote.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Tokin.png">
+    <Resource Include="Resources\KeimaSente.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\KinshoGote.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\KinshoSente.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\KyoshaGote.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\KyoshaSente.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\NariginGote.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\NariginSente.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\NarikeiGote.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\NarikeiSente.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\NarikyoGote.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\NarikyoSente.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\OshoGote.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\OshoSente.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\RyumaGote.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\RyumaSente.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\RyuoGote.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\RyuoSente.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\TokinGote.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\TokinSente.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

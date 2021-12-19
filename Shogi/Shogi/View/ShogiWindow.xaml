@@ -14,40 +14,31 @@
 
     <Window.Resources>
         <local:PieceToImageConverter x:Key="PieceToImageConverter"/>
-
-        <DataTemplate x:Key="CellDataTemplate">
-            <Image Source="{Binding Mode=OneWay, Converter={StaticResource PieceToImageConverter}}"/>
-        </DataTemplate>
-
-        <DataTemplate x:Key="RowDataTemplate">
-            <ItemsControl ItemsSource="{Binding}" 
-                          ItemTemplate="{DynamicResource CellDataTemplate}">
-            </ItemsControl>
-        </DataTemplate>
     </Window.Resources>
 
-    <StackPanel>
-        <ItemsControl ItemsSource="{Binding Grid, Mode=OneWay}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Rows="9" Columns="9"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+    <Window.Background>
+        <ImageBrush ImageSource="/Shogi;component/Resources/Background.jpg"/>
+    </Window.Background>
 
-            <ItemsControl.ItemContainerStyle>
-                <Style>
-                    <Setter Property="Grid.Row" Value="{Binding Item2}"/>
-                    <Setter Property="Grid.Column" Value="{Binding Item3}"/>
-                </Style>
-            </ItemsControl.ItemContainerStyle>
+    <Viewbox Stretch="Uniform">
+        <Border BorderBrush="Black" BorderThickness="0.5"  Margin="20, 20, 20, 20">
+            <ItemsControl ItemsSource="{Binding Grid, Mode=OneWay}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="9" Columns="9" Width="500" Height="500"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Image Source="{Binding Item1, 
-                        Mode=OneWay, 
-                        Converter={StaticResource PieceToImageConverter}}"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </StackPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="0.5">
+                            <Image Source="{Binding Mode=OneWay,
+                               Converter={StaticResource PieceToImageConverter}}"
+                               Margin="2, 2, 2, 2"/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+    </Viewbox>
 </Window>
