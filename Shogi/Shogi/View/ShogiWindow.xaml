@@ -21,24 +21,62 @@
     </Window.Background>
 
     <Viewbox Stretch="Uniform">
-        <Border BorderBrush="Black" BorderThickness="0.5"  Margin="20, 20, 20, 20">
-            <ItemsControl ItemsSource="{Binding Grid, Mode=OneWay}">
+        <StackPanel Orientation="Horizontal">
+            <ItemsControl ItemsSource="{Binding GoteHand, Mode=OneWay}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="9" Columns="9" Width="500" Height="500"/>
+                        <UniformGrid Rows="4" Columns="4"
+                                     Width="200" Height="200"
+                                     Margin="20, 20, 0, 20"
+                                     VerticalAlignment="Top"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Black" BorderThickness="0.5">
-                            <Image Source="{Binding Mode=OneWay,
-                               Converter={StaticResource PieceToImageConverter}}"
-                               Margin="2, 2, 2, 2"/>
-                        </Border>
+                        <Image Source="{Binding Mode=OneWay,
+                                Converter={StaticResource PieceToImageConverter}}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </Border>
+
+            <Border BorderBrush="Black" BorderThickness="0.5" Margin="20, 20, 20, 20">
+                <ItemsControl ItemsSource="{Binding Grid, Mode=OneWay}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="9" Columns="9"
+                                         Width="500" Height="500"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="Black" BorderThickness="0.5">
+                               <Image Source="{Binding Mode=OneWay,
+                                               Converter={StaticResource PieceToImageConverter}}"/>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+
+            <ItemsControl ItemsSource="{Binding SenteHand, Mode=OneWay}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="4" Columns="4"
+                                     Width="200" Height="200"
+                                     Margin="0, 20, 20, 20"
+                                     VerticalAlignment="Bottom"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding Mode=OneWay,
+                                Converter={StaticResource PieceToImageConverter}}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
     </Viewbox>
 </Window>

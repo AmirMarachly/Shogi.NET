@@ -52,6 +52,38 @@ namespace Shogi.ViewModel
             }
         }
 
+        private ObservableCollection<Cell> senteHand;
+
+        public ObservableCollection<Cell> SenteHand
+        {
+            get
+            {
+                return senteHand;
+            }
+
+            set
+            {
+                senteHand = value;
+                OnPropertyChanged("SenteHand");
+            }
+        }
+
+        private ObservableCollection<Cell> goteHand;
+
+        public ObservableCollection<Cell> GoteHand
+        {
+            get
+            {
+                return goteHand;
+            }
+
+            set
+            {
+                goteHand = value;
+                OnPropertyChanged("GoteHand");
+            }
+        }
+
         public ShogiViewModel()
         {
             ObservableCollection<Cell> newGrid = new ObservableCollection<Cell>();
@@ -69,6 +101,20 @@ namespace Shogi.ViewModel
             }
 
             Grid = newGrid;
+
+            ObservableCollection<Cell> newHand = new ObservableCollection<Cell>();
+
+            for (int i = 0; i < 4; ++i)
+            {
+                for (int j = 0; j < 4; ++j)
+                {
+                    Piece newPiece = (Piece)pieces.GetValue(random.Next(pieces.Length));
+                    newHand.Add(new Cell() { piece = newPiece, isSente = random.Next(2) == 0 });
+                }
+            }
+
+            SenteHand = newHand;
+            GoteHand = newHand;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
