@@ -3,10 +3,51 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Shogi"
+        xmlns:local="clr-namespace:Shogi.View"
+        xmlns:vm="clr-namespace:Shogi.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
 
-    </Grid>
+    <Window.DataContext>
+        <vm:ShogiViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <local:PieceToImageConverter x:Key="PieceToImageConverter"/>
+
+        <DataTemplate x:Key="CellDataTemplate">
+            <Image Source="{Binding Mode=OneWay, Converter={StaticResource PieceToImageConverter}}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="RowDataTemplate">
+            <ItemsControl ItemsSource="{Binding}" 
+                          ItemTemplate="{DynamicResource CellDataTemplate}">
+            </ItemsControl>
+        </DataTemplate>
+    </Window.Resources>
+
+    <StackPanel>
+        <ItemsControl ItemsSource="{Binding Grid, Mode=OneWay}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="9" Columns="9"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Grid.Row" Value="{Binding Item2}"/>
+                    <Setter Property="Grid.Column" Value="{Binding Item3}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="{Binding Item1, 
+                        Mode=OneWay, 
+                        Converter={StaticResource PieceToImageConverter}}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
 </Window>
