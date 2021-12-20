@@ -5,10 +5,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
 
 namespace Shogi.ViewModel
 {
-    class ShogiViewModel : INotifyPropertyChanged
+    public class ShogiViewModel : INotifyPropertyChanged
     {
         public enum Piece
         {
@@ -30,25 +34,19 @@ namespace Shogi.ViewModel
             Empty
         }
 
-        public struct Cell
-        {
-            public Piece piece;
-            public bool isSente;
-        }
+        private ObservableCollection<Cell> board;
 
-        private ObservableCollection<Cell> grid;
-
-        public ObservableCollection<Cell> Grid
+        public ObservableCollection<Cell> Board
         {
             get
             {
-                return grid;
+                return board;
             }
 
             set
             {
-                grid = value;
-                OnPropertyChanged("Grid");
+                board = value;
+                OnPropertyChanged("Board");
             }
         }
 
@@ -84,6 +82,14 @@ namespace Shogi.ViewModel
             }
         }
 
+        public ICommand OnGridClicked
+        {
+            get 
+            {
+                return new RelayCommand(GridClicked);
+            }
+        }
+
         public ShogiViewModel()
         {
             ObservableCollection<Cell> newGrid = new ObservableCollection<Cell>();
@@ -91,16 +97,19 @@ namespace Shogi.ViewModel
             Array pieces = Enum.GetValues(typeof(Piece));
             Random random = new Random();
 
-            for (int i = 0; i < 9; ++i)
+            for (int i = 0; i < 81; ++i)
             {
-                for (int j = 0; j < 9; ++j)
+                Piece newPiece = (Piece)pieces.GetValue(random.Next(pieces.Length));
+                newGrid.Add(new Cell()
                 {
-                    Piece newPiece = (Piece) pieces.GetValue(random.Next(pieces.Length));
-                    newGrid.Add(new Cell() {piece = newPiece, isSente = random.Next(2) == 0});
-                }
+                    Piece = newPiece,
+                    IsSente = random.Next(2) == 0,
+                    Highlighted = false,
+                    Index = i
+                });
             }
 
-            Grid = newGrid;
+            Board = newGrid;
 
             ObservableCollection<Cell> newHand = new ObservableCollection<Cell>();
 
@@ -109,12 +118,30 @@ namespace Shogi.ViewModel
                 for (int j = 0; j < 4; ++j)
                 {
                     Piece newPiece = (Piece)pieces.GetValue(random.Next(pieces.Length));
-                    newHand.Add(new Cell() { piece = newPiece, isSente = random.Next(2) == 0 });
+                    newHand.Add(new Cell() { Piece = newPiece, IsSente = random.Next(2) == 0});
                 }
             }
 
             SenteHand = newHand;
             GoteHand = newHand;
+        }
+
+        private void RefreshBoard()
+        {
+            CollectionViewSource.GetDefaultView(Board).Refresh();
+        }
+
+        private void GridClicked(object sender)
+        {
+            if (sender is not Cell)
+            {
+                return;
+            }
+
+            Cell cell = (Cell)sender;
+            cell.Highlighted = true;
+
+            RefreshBoard();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

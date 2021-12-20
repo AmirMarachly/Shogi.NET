@@ -14,6 +14,36 @@
 
     <Window.Resources>
         <local:PieceToImageConverter x:Key="PieceToImageConverter"/>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent"/>
+            
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightGreen"/>
+                </Trigger>
+                
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="LightBlue"/>
+                </Trigger>
+
+                <DataTrigger Binding="{Binding Highlighted}" Value="true">
+                    <Setter Property="Background" Value="LightGreen"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <Window.Background>
@@ -34,14 +64,17 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Image Source="{Binding Mode=OneWay,
-                                Converter={StaticResource PieceToImageConverter}}"/>
+                        <Button>
+                            <Image Source="{Binding Mode=OneWay,
+                                            Converter={StaticResource PieceToImageConverter}}"/>
+                        </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <Border BorderBrush="Black" BorderThickness="0.5" Margin="20, 20, 20, 20">
-                <ItemsControl ItemsSource="{Binding Grid, Mode=OneWay}">
+            <Border BorderBrush="Black" BorderThickness="0.5"
+                    Margin="20, 20, 20, 20">
+                <ItemsControl ItemsSource="{Binding Board, Mode=OneWay}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Rows="9" Columns="9"
@@ -52,8 +85,13 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="Black" BorderThickness="0.5">
-                               <Image Source="{Binding Mode=OneWay,
-                                               Converter={StaticResource PieceToImageConverter}}"/>
+                                <Button Command="{Binding DataContext.OnGridClicked,
+                                                  RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                        CommandParameter="{Binding}">
+
+                                    <Image Source="{Binding Mode=OneWay,
+                                                    Converter={StaticResource PieceToImageConverter}}"/>
+                                </Button>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -72,8 +110,10 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Image Source="{Binding Mode=OneWay,
-                                Converter={StaticResource PieceToImageConverter}}"/>
+                        <Button>
+                            <Image Source="{Binding Mode=OneWay,
+                                            Converter={StaticResource PieceToImageConverter}}"/>
+                        </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
