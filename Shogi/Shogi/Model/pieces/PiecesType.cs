@@ -11,10 +11,20 @@ namespace Shogi.Model.pieces
         King,
         Rook,
         Bishop,
-        GoldGenerals,
-        SilverGenerals,
-        Knights,
-        Lances,
+        Gold,
+        Silver,
+        Knight,
+        Lance,
         Pawns
     }
+
+    //public enum EvolvedPiecesType
+    //{
+    //    Dragon = 1,
+    //    Horse,
+    //    PromotedSilver = 4,
+    //    PromotedKnight,
+    //    PromotedLance,
+    //    Tokin
+    //}
 }
