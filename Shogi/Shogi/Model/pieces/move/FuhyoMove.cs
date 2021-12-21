@@ -8,15 +8,15 @@ namespace Shogi.Model.pieces.move
 {
     class FuhyoMove : IMove
     {
-        public List<(int, int)> EvolvedMove((int, int) startPos, bool isSente)
+        public List<(int, int)> EvolvedMove((int, int) startPos, Board board, bool isSente)
         {
             IMove move = new KinshoMove();
 
-            return move.Move(startPos, isSente);
+            return move.Move(startPos, board, isSente);
 
         }
 
-        public List<(int, int)> Move((int, int) startPos, bool isSente)
+        public List<(int, int)> Move((int, int) startPos, Board board, bool isSente)
         {
             List<(int, int)> result = new List<(int, int)>();
 

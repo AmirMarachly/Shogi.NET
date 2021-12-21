@@ -8,14 +8,14 @@ namespace Shogi.Model.pieces.move
 {
     class KyoshaMove : IMove
     {
-        public List<(int, int)> EvolvedMove((int, int) startPos, bool isSente)
+        public List<(int, int)> EvolvedMove((int, int) startPos, Board board, bool isSente)
         {
             IMove move = new KinshoMove();
 
-            return move.Move(startPos, isSente);
+            return move.Move(startPos, board, isSente);
         }
 
-        public List<(int, int)> Move((int, int) startPos, bool isSente)
+        public List<(int, int)> Move((int, int) startPos, Board board, bool isSente)
         {
             List<(int, int)> result = new List<(int, int)>();
 
@@ -34,6 +34,10 @@ namespace Shogi.Model.pieces.move
                     tmpPos = (tmpPos.Item1 + 1, tmpPos.Item2);
                 }
                 result.Add(tmpPos);
+                if (board[tmpPos.Item1, tmpPos.Item2] != null)
+                {
+                    return result;
+                }
             }
 
             return result;

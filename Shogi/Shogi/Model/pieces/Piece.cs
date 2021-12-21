@@ -57,11 +57,11 @@ namespace Shogi.Model.pieces
 
             if (!isEvolved)
             {
-                possibleMove = move.Move(pos, owner.IsSente);
+                possibleMove = move.Move(pos, board, owner.IsSente);
             }
             else
             {
-                possibleMove = move.EvolvedMove(pos, owner.IsSente);
+                possibleMove = move.EvolvedMove(pos, board, owner.IsSente);
             }
             
             List<(int, int)> avaibleMove = possibleMove.ConvertAll(move => move);
@@ -74,7 +74,7 @@ namespace Shogi.Model.pieces
                     Piece piece = board[cell.Item1, cell.Item2];
                     if (piece != null)
                     {
-                        //avaibleMove.Remove(cell);
+                         avaibleMove.Remove(cell);
                         if (piece.Owner != owner)
                         {
                             attackMove.Add(cell);

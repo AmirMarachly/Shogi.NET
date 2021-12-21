@@ -8,12 +8,12 @@ namespace Shogi.Model.pieces.move
 {
     class KinshoMove : IMove
     {
-        public List<(int, int)> EvolvedMove((int, int) startPos, bool isSente)
+        public List<(int, int)> EvolvedMove((int, int) startPos, Board board, bool isSente)
         {
             throw new NotImplementedException();
         }
 
-        public List<(int, int)> Move((int, int) startPos, bool isSente)
+        public List<(int, int)> Move((int, int) startPos, Board board, bool isSente)
         {
             List<(int, int)> result = new List<(int, int)>();
 

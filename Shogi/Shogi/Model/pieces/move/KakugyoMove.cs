@@ -8,9 +8,9 @@ namespace Shogi.Model.pieces.move
 {
     class KakugyoMove : IMove
     {
-        public List<(int, int)> EvolvedMove((int, int) startPos, bool isSente)
+        public List<(int, int)> EvolvedMove((int, int) startPos, Board board, bool isSente)
         {
-            List<(int, int)> result = Move(startPos, isSente);
+            List<(int, int)> result = Move(startPos, board, isSente);
 
             result.Add((startPos.Item1, startPos.Item2 + 1));
             result.Add((startPos.Item1, startPos.Item2 - 1));
@@ -20,7 +20,7 @@ namespace Shogi.Model.pieces.move
             return result;
         }
 
-        public List<(int, int)> Move((int, int) startPos, bool isSente)
+        public List<(int, int)> Move((int, int) startPos, Board board, bool isSente)
         {
             List<(int, int)> result = new List<(int, int)>();
 
@@ -39,6 +39,10 @@ namespace Shogi.Model.pieces.move
                 {
                     tmpPos = (tmpPos.Item1 + directions[i].Item1, tmpPos.Item2 + directions[i].Item2);
                     result.Add(tmpPos);
+                    if (board[tmpPos.Item1, tmpPos.Item2] != null)
+                    {
+                        break;
+                    }
                 }
 
                 tmpPos = startPos;
