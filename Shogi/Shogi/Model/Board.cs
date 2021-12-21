@@ -150,6 +150,38 @@ namespace Shogi.Model
             
         }
 
+        public List<(int, int)> GetEmptyCell()
+        {
+            List<(int, int)> emptyCells = new List<(int, int)>();
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (board[i,j] == null)
+                    {
+                        emptyCells.Add((i, j));
+                    }
+                }
+            }
+
+            return emptyCells;
+        }
+
+        public bool ParachuteAPiece(Piece piece, (int, int) parachutePos)
+        {
+            if (GetEmptyCell().Contains(parachutePos) || !piece.Owner.PiecesInHand.Contains(piece))
+            {
+                return false;
+            }
+
+            board[parachutePos.Item1, parachutePos.Item2] = piece;
+            piece.Owner.PiecesInHand.Remove(piece);
+            piece.Owner.PiecesOnBoard.Add(piece);
+
+            return true;
+        }
+
         public bool MoveAPiece((int,int) currentPos, (int,int) nextPos)
         {
             Piece piece = this[currentPos.Item1, currentPos.Item2];
