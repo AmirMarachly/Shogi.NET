@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shogi.Model
 {
-    class Player
+    public class Player
     {
         private String name;
         public String Name

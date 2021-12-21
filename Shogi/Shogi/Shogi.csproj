@@ -10,8 +10,7 @@
 
   <ItemGroup>
     <None Remove="Resources\Background.jpg" />
-    <None Remove="Resources\EmptyGote.png" />
-    <None Remove="Resources\EmptySente.png" />
+    <None Remove="Resources\Empty.png" />
     <None Remove="Resources\FuhyoGote.png" />
     <None Remove="Resources\FuhyoSente.png" />
     <None Remove="Resources\GinshoGote.png" />
@@ -48,10 +47,7 @@
     <Resource Include="Resources\Background.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\EmptyGote.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\EmptySente.png">
+    <Resource Include="Resources\Empty.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\FuhyoGote.png">

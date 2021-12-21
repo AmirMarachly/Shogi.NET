@@ -1,11 +1,14 @@
-﻿using Shogi.ViewModel;
+﻿using Shogi.Model.pieces;
+using Shogi.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
+using static Shogi.ViewModel.ShogiViewModel;
 
 namespace Shogi.View
 {
@@ -13,13 +16,17 @@ namespace Shogi.View
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Cell)
+            Cell cell = value as Cell;
+
+            if (cell != null)
             {
-                Cell cell = (Cell) value;
-                return $"/Shogi;component/Resources/{cell.Piece}{(cell.IsSente ? "Sente" : "Gote")}.png";
+                if (cell.Piece != null)
+                {
+                    return $"/Shogi;component/Resources/{cell.Piece.PieceType}{(cell.Piece.Owner.IsSente ? "Sente" : "Gote")}.png";
+                }
             }
 
-            return "";
+            return $"/Shogi;component/Resources/Empty.png";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

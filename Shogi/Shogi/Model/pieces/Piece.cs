@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shogi.Model.pieces
 {
-    class Piece
+    public class Piece
     {
 
         private IMove move;
@@ -35,24 +35,19 @@ namespace Shogi.Model.pieces
             get { return pos; }
         }
 
-        private bool isHighlight;
-        public bool IsHighlight
-        {
-            get { return isHighlight; }
-            set { isHighlight = value; }
-        }
-
-        public Piece(PiecesType _type, Player _owner, bool _isEvolved = false, bool _isHighlight = false)
+        public Piece(PiecesType _type, Player _owner, (int, int) _pos, bool _isEvolved = false)
         {
             pieceType = _type;
             isEvolved = _isEvolved;
             owner = _owner;
-            isHighlight = _isHighlight;
+            pos = _pos;
             string typeMove = pieceType.ToString() + "Move";
 
             Type moveClass = Type.GetType("Shogi.Model.pieces.move." + typeMove);
 
             move = Activator.CreateInstance(moveClass, null) as IMove;
+
+            owner.PiecesOnBoard.Add(this);
         }
 
         public Dictionary<string, List<(int, int)>> GetPossibleMove(Board board)
@@ -60,7 +55,7 @@ namespace Shogi.Model.pieces
 
             List<(int, int)> possibleMove;
 
-            if (isEvolved)
+            if (!isEvolved)
             {
                 possibleMove = move.Move(pos, owner.IsSente);
             }

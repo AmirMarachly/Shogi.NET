@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shogi.Model
 {
-    class Board
+    public class Board
     {
         private int size;
         public int Size
@@ -17,9 +17,19 @@ namespace Shogi.Model
         }
 
         private Piece[,] board;
-        public Piece? this[int i, int j]
+        public Piece this[int i, int j]
         {
-            get { return board[i,j]; }
+            get 
+            {
+                try
+                {
+                    return board[i, j];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return null;
+                }
+            }
             set 
             {
                 board[i,j] = value;
@@ -51,22 +61,22 @@ namespace Shogi.Model
                         {
                             case 0:
                             case 8:
-                                board[i, j] = new Piece(PiecesType.Kyosha, p);
+                                board[i, j] = new Piece(PiecesType.Kyosha, p, (i, j));
                                 break;
                             case 1:
                             case 7:
-                                board[i, j] = new Piece(PiecesType.Keima, p);
+                                board[i, j] = new Piece(PiecesType.Keima, p, (i, j));
                                 break;
                             case 2:
                             case 6:
-                                board[i, j] = new Piece(PiecesType.Ginsho, p);
+                                board[i, j] = new Piece(PiecesType.Ginsho, p, (i, j));
                                 break;
                             case 3:
                             case 5:
-                                board[i, j] = new Piece(PiecesType.Kinsho, p);
+                                board[i, j] = new Piece(PiecesType.Kinsho, p, (i, j));
                                 break;
                             case 4:
-                                board[i, j] = new Piece(PiecesType.Osho, p);
+                                board[i, j] = new Piece(PiecesType.Osho, p, (i, j));
                                 break;
                             default:
                                 break;
@@ -76,30 +86,30 @@ namespace Shogi.Model
                     {
                         if (j == 1)
                         {
-                            board[i, j] = new Piece(PiecesType.Hisha, p);
+                            board[i, j] = new Piece(PiecesType.Hisha, p, (i, j));
                         }
                         else if (j == 7)
                         {
-                            board[i, j] = new Piece(PiecesType.Kakugyo, p);
+                            board[i, j] = new Piece(PiecesType.Kakugyo, p, (i, j));
                         }
                     }
                     else if (i == 2)
                     {
-                        board[i, j] = new Piece(PiecesType.Fuhyo, p);
+                        board[i, j] = new Piece(PiecesType.Fuhyo, p, (i, j));
                     }
                     else if(i == 6)
                     {
-                        board[i, j] = new Piece(PiecesType.Fuhyo, p);
+                        board[i, j] = new Piece(PiecesType.Fuhyo, p, (i, j));
                     }
                     else if(i == 7)
                     {
                         if (j == 1)
                         {
-                            board[i, j] = new Piece(PiecesType.Kakugyo, p);
+                            board[i, j] = new Piece(PiecesType.Kakugyo, p, (i, j));
                         }
                         else if (j == 7)
                         {
-                            board[i, j] = new Piece(PiecesType.Hisha, p);
+                            board[i, j] = new Piece(PiecesType.Hisha, p, (i, j));
                         }
                     }
 
@@ -142,17 +152,6 @@ namespace Shogi.Model
             }
 
             return false;
-        }
-
-        public void resetHighlight()
-        {
-            foreach (Piece p in board)
-            {
-                if (p != null)
-                {
-                    p.IsHighlight = false;
-                }
-            }
         }
     }
 }

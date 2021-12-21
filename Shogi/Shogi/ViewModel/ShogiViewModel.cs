@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Shogi.Model;
+using Shogi.Model.pieces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,39 +16,34 @@ namespace Shogi.ViewModel
 {
     public class ShogiViewModel : INotifyPropertyChanged
     {
-        public enum Piece
+        public class Cell
         {
-            Osho,
-            Gyokusho,
-            Hisha,
-            Ryuo,
-            Kakugyo,
-            Ryuma,
-            Kinsho,
-            Ginsho,
-            Narigin,
-            Keima,
-            Narikei,
-            Kyosha,
-            Narikyo,
-            Fuhyo,
-            Tokin,
-            Empty
+            public Piece Piece
+            {
+                get;
+                set;
+            }
+
+            public bool IsHighlighted
+            {
+                get;
+                set;
+            }
         }
 
-        private ObservableCollection<Cell> board;
+        private ObservableCollection<Cell> observableBoard;
 
-        public ObservableCollection<Cell> Board
+        public ObservableCollection<Cell> ObservableBoard
         {
             get
             {
-                return board;
+                return observableBoard;
             }
 
             set
             {
-                board = value;
-                OnPropertyChanged("Board");
+                observableBoard = value;
+                OnPropertyChanged("ObservableBoard");
             }
         }
 
@@ -90,56 +87,85 @@ namespace Shogi.ViewModel
             }
         }
 
+        private Player player1;
+        private Player player2;
+        private Board board;
+
         public ShogiViewModel()
         {
-            ObservableCollection<Cell> newGrid = new ObservableCollection<Cell>();
+            player1 = new Player("Amir", true, true);
+            player2 = new Player("Ulys", false, false);
 
-            Array pieces = Enum.GetValues(typeof(Piece));
-            Random random = new Random();
-
-            for (int i = 0; i < 81; ++i)
-            {
-                Piece newPiece = (Piece)pieces.GetValue(random.Next(pieces.Length));
-                newGrid.Add(new Cell()
-                {
-                    Piece = newPiece,
-                    IsSente = random.Next(2) == 0,
-                    Highlighted = false,
-                    Index = i
-                });
-            }
-
-            Board = newGrid;
-
-            ObservableCollection<Cell> newHand = new ObservableCollection<Cell>();
-
-            for (int i = 0; i < 4; ++i)
-            {
-                for (int j = 0; j < 4; ++j)
-                {
-                    Piece newPiece = (Piece)pieces.GetValue(random.Next(pieces.Length));
-                    newHand.Add(new Cell() { Piece = newPiece, IsSente = random.Next(2) == 0});
-                }
-            }
-
-            SenteHand = newHand;
-            GoteHand = newHand;
+            board = new Board(player1, player2);
+            InitBoard();
         }
 
         private void RefreshBoard()
         {
-            CollectionViewSource.GetDefaultView(Board).Refresh();
+            CollectionViewSource.GetDefaultView(ObservableBoard).Refresh();
+            CollectionViewSource.GetDefaultView(SenteHand).Refresh();
+            CollectionViewSource.GetDefaultView(GoteHand).Refresh();
+        }
+
+        private void InitBoard()
+        {
+            ObservableBoard = new();
+            SenteHand = new();
+            GoteHand = new();
+
+            for (int i = 0; i < 9; ++i)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    ObservableBoard.Add(new Cell() { Piece = board[i, j] });
+                }
+            }
+
+            RefreshBoard();
+        }
+
+        private void UpdateBoard()
+        {
+            for (int i = 0; i < 9; ++i)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    ObservableBoard[i * 9 + j].Piece = board[j, i];
+                }
+            }
+
+            RefreshBoard();
+        }
+
+        private void ResetHighlight()
+        {
+            foreach (Cell cell in ObservableBoard)
+            {
+                cell.IsHighlighted = false;
+            }
         }
 
         private void GridClicked(object sender)
         {
-            if (sender is not Cell)
+            Cell cell = sender as Cell;
+
+            if (cell == null)
             {
                 return;
             }
 
-            Cell cell = (Cell)sender;
-            cell.Highlighted = true;
+            ResetHighlight();
+            var moves = cell.Piece.GetPossibleMove(board);
+
+            foreach ((int, int) move in moves["avaibleMove"])
+            {
+                ObservableBoard[move.Item1 * 9 + move.Item2].IsHighlighted = true;
+            }
+
+            foreach ((int, int) move in moves["attackMove"])
+            {
+                ObservableBoard[move.Item1 * 9 + move.Item2].IsHighlighted = true;
+            }
 
             RefreshBoard();
         }
