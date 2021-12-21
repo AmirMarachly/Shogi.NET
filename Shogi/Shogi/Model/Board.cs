@@ -16,21 +16,20 @@ namespace Shogi.Model
             set { size = value; }
         }
 
-        private List<List<Piece>> board;
+        private Piece[,] board;
         public Piece? this[int i, int j]
         {
-            get { return board.ElementAt(i).ElementAt(j); }
+            get { return board[i,j]; }
             set 
             {
-                board.ElementAt(i).RemoveAt(j);
-                board.ElementAt(i).Insert(j, value);
+                board[i,j] = value;
             }
         }
 
-        public Board(Player p1, Player p2, int _size)
+        public Board(Player p1, Player p2, int _size = 9)
         {
             size = _size;
-            board = new List<List<Piece>>();
+            board = new Piece[size, size];
             Init(p1, p2);
         }
 
@@ -40,10 +39,9 @@ namespace Shogi.Model
 
             for (int i = 0; i < size; i++)
             {
-                board.Append(new List<Piece>());
                 for (int j = 0; j < size; j++)
                 {
-                    board.ElementAt(i).Append(null);
+                    board[i,j] = null;
 
                     if (i > size / 2) p = p1;
 
@@ -53,22 +51,22 @@ namespace Shogi.Model
                         {
                             case 0:
                             case 8:
-                                this[i, j] = new Piece(PiecesType.Lance, p);
+                                board[i, j] = new Piece(PiecesType.Kyosha, p);
                                 break;
                             case 1:
                             case 7:
-                                this[i, j] = new Piece(PiecesType.Knight, p);
+                                board[i, j] = new Piece(PiecesType.Keima, p);
                                 break;
                             case 2:
                             case 6:
-                                this[i, j] = new Piece(PiecesType.Silver, p);
+                                board[i, j] = new Piece(PiecesType.Ginsho, p);
                                 break;
                             case 3:
                             case 5:
-                                this[i, j] = new Piece(PiecesType.Gold, p);
+                                board[i, j] = new Piece(PiecesType.Kinsho, p);
                                 break;
                             case 4:
-                                this[i, j] = new Piece(PiecesType.King, p);
+                                board[i, j] = new Piece(PiecesType.Osho, p);
                                 break;
                             default:
                                 break;
@@ -78,30 +76,30 @@ namespace Shogi.Model
                     {
                         if (j == 1)
                         {
-                            this[i, j] = new Piece(PiecesType.Rook, p);
+                            board[i, j] = new Piece(PiecesType.Hisha, p);
                         }
                         else if (j == 7)
                         {
-                            this[i, j] = new Piece(PiecesType.Bishop, p);
+                            board[i, j] = new Piece(PiecesType.Kakugyo, p);
                         }
                     }
                     else if (i == 2)
                     {
-                        this[i, j] = new Piece(PiecesType.Pawns, p);
+                        board[i, j] = new Piece(PiecesType.Fuhyo, p);
                     }
                     else if(i == 6)
                     {
-                        this[i, j] = new Piece(PiecesType.Pawns, p);
+                        board[i, j] = new Piece(PiecesType.Fuhyo, p);
                     }
                     else if(i == 7)
                     {
                         if (j == 1)
                         {
-                            this[i, j] = new Piece(PiecesType.Bishop, p);
+                            board[i, j] = new Piece(PiecesType.Kakugyo, p);
                         }
                         else if (j == 7)
                         {
-                            this[i, j] = new Piece(PiecesType.Rook, p);
+                            board[i, j] = new Piece(PiecesType.Hisha, p);
                         }
                     }
 
@@ -112,18 +110,22 @@ namespace Shogi.Model
 
         public bool MoveAPiece(Piece piece, (int,int) nextPos)
         {
-            Piece? otherPiece = this[nextPos.Item1, nextPos.Item2];
+            Piece otherPiece = board[nextPos.Item1, nextPos.Item2];
             Player player = piece.Owner;
 
             if (otherPiece != null && otherPiece.Owner != player)
             {
                 otherPiece.HasBeenEat(player);
                 piece.Move(nextPos);
+                board[piece.Pos.Item1, piece.Pos.Item2] = null;
+                board[nextPos.Item1, nextPos.Item2] = piece;
                 return true;
             }
             else if (otherPiece == null)
             {
                 piece.Move(nextPos);
+                board[piece.Pos.Item1, piece.Pos.Item2] = null;
+                board[nextPos.Item1, nextPos.Item2] = piece;
                 return true;
             }
 
@@ -133,13 +135,24 @@ namespace Shogi.Model
 
         public bool MoveAPiece((int,int) currentPos, (int,int) nextPos)
         {
-            Piece? piece = this[currentPos.Item1, currentPos.Item2];
+            Piece piece = this[currentPos.Item1, currentPos.Item2];
             if (piece != null)
             {
                return MoveAPiece(piece, nextPos);
             }
 
             return false;
+        }
+
+        public void resetHighlight()
+        {
+            foreach (Piece p in board)
+            {
+                if (p != null)
+                {
+                    p.IsHighlight = false;
+                }
+            }
         }
     }
 }

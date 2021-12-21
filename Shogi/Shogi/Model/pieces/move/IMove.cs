@@ -8,6 +8,7 @@ namespace Shogi.Model.pieces
 {
     interface IMove
     {
-        List<(int,int)> Move((int,int) startPos);
+        List<(int,int)> Move((int,int) startPos, bool isSente);
+        List<(int, int)> EvolvedMove((int, int) startPos, bool isSente);
     }
 }

@@ -10,10 +10,10 @@ namespace Shogi.Model.pieces
     {
 
         private IMove move;
-        private PiecesType type;
-        public PiecesType Type
+        private PiecesType pieceType;
+        public PiecesType PieceType
         {
-            get { return type; }
+            get { return pieceType; }
         }
 
         private bool isEvolved;
@@ -35,45 +35,46 @@ namespace Shogi.Model.pieces
             get { return pos; }
         }
 
-        public Piece(PiecesType _type, Player _owner, bool _isEvolved = false)
+        private bool isHighlight;
+        public bool IsHighlight
         {
-            type = _type;
+            get { return isHighlight; }
+            set { isHighlight = value; }
+        }
+
+        public Piece(PiecesType _type, Player _owner, bool _isEvolved = false, bool _isHighlight = false)
+        {
+            pieceType = _type;
             isEvolved = _isEvolved;
             owner = _owner;
+            isHighlight = _isHighlight;
+            string typeMove = pieceType.ToString() + "Move";
 
-            switch (type)
-            {
-                case PiecesType.King:
+            Type moveClass = Type.GetType("Shogi.Model.pieces.move." + typeMove);
 
-                    break;
-                case PiecesType.Rook:
-                    break;
-                case PiecesType.Bishop:
-                    break;
-                case PiecesType.Gold:
-                    break;
-                case PiecesType.Silver:
-                    break;
-                case PiecesType.Knight:
-                    break;
-                case PiecesType.Lance:
-                    break;
-                case PiecesType.Pawns:
-                    break;
-                default:
-                    break;
-            }
+            move = Activator.CreateInstance(moveClass, null) as IMove;
         }
 
         public Dictionary<string, List<(int, int)>> GetPossibleMove(Board board)
         {
-            List<(int, int)> possibleMove = move.Move(pos);
+
+            List<(int, int)> possibleMove;
+
+            if (isEvolved)
+            {
+                possibleMove = move.Move(pos, owner.IsSente);
+            }
+            else
+            {
+                possibleMove = move.EvolvedMove(pos, owner.IsSente);
+            }
+            
             List<(int, int)> avaibleMove = possibleMove.ConvertAll(move => move);
             List<(int, int)> attackMove = new List<(int, int)>();
 
             foreach ((int,int) cell in possibleMove)
             {
-                Piece? piece = board[cell.Item1, cell.Item2];
+                Piece piece = board[cell.Item1, cell.Item2];
                 if (piece != null)
                 {
                     avaibleMove.Remove(cell);
@@ -104,6 +105,7 @@ namespace Shogi.Model.pieces
         {
             if (isEvolved)
             {
+                pieceType = (PiecesType)((int)pieceType - 8);
                 isEvolved = !isEvolved;
             }
             return this;
@@ -113,7 +115,9 @@ namespace Shogi.Model.pieces
         {
             if (!isEvolved)
             {
+                pieceType = (PiecesType)((int)pieceType + 8);
                 isEvolved = !isEvolved;
+
             }
             return this;
         }

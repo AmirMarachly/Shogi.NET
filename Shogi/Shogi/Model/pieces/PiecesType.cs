@@ -8,23 +8,20 @@ namespace Shogi.Model.pieces
 {
     public enum PiecesType
     {
-        King,
-        Rook,
-        Bishop,
-        Gold,
-        Silver,
-        Knight,
-        Lance,
-        Pawns
+        Osho,
+        Gyokusho,
+        Hisha,
+        Kakugyo,
+        Kinsho,
+        Ginsho,
+        Keima,
+        Kyosha,
+        Fuhyo,
+        Ryuo = 10,
+        Ryuma,
+        Narigin = 13,
+        Narikei,
+        Narikyo,
+        Tokin
     }
-
-    //public enum EvolvedPiecesType
-    //{
-    //    Dragon = 1,
-    //    Horse,
-    //    PromotedSilver = 4,
-    //    PromotedKnight,
-    //    PromotedLance,
-    //    Tokin
-    //}
 }
