@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Shogi.Model.pieces
+{
+    interface IMove
+    {
+        List<(int,int)> Move((int,int) startPos, bool isSente);
+        List<(int, int)> EvolvedMove((int, int) startPos, bool isSente);
+    }
+}
