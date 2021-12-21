@@ -76,7 +76,14 @@ namespace Shogi.Model
                                 board[i, j] = new Piece(PiecesType.Kinsho, p, (i, j));
                                 break;
                             case 4:
-                                board[i, j] = new Piece(PiecesType.Osho, p, (i, j));
+                                if(p.IsSente)
+                                {
+                                    board[i, j] = new Piece(PiecesType.Osho, p, (i, j));
+                                }
+                                else
+                                {
+                                    board[i, j] = new Piece(PiecesType.Gyokusho, p, (i, j));
+                                }
                                 break;
                             default:
                                 break;

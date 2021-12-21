@@ -69,15 +69,23 @@ namespace Shogi.Model.pieces
 
             foreach ((int,int) cell in possibleMove)
             {
-                Piece piece = board[cell.Item1, cell.Item2];
-                if (piece != null)
+                if (cell.Item1 < 9 && cell.Item1 >= 0 && cell.Item2 < 9 && cell.Item2 >= 0)
                 {
-                    avaibleMove.Remove(cell);
-                    if (piece.Owner != owner)
+                    Piece piece = board[cell.Item1, cell.Item2];
+                    if (piece != null)
                     {
-                        attackMove.Add(cell);
+                        //avaibleMove.Remove(cell);
+                        if (piece.Owner != owner)
+                        {
+                            attackMove.Add(cell);
+                        }
                     }
                 }
+                else
+                {
+                    avaibleMove.Remove(cell);
+                }
+
             }
 
             Dictionary<string, List<(int, int)>> returnDict = new Dictionary<string, List<(int, int)>>();

@@ -10,32 +10,33 @@ namespace Shogi.Model.pieces.move
     {
         public List<(int, int)> EvolvedMove((int, int) startPos, bool isSente)
         {
-            List<(int, int)> result = new List<(int, int)>();
+            IMove move = new KinshoMove();
 
-            result.Add((startPos.Item1, startPos.Item2 + 1));
-            result.Add((startPos.Item1, startPos.Item2 - 1));
-
-            result.Add((startPos.Item1 + 1, startPos.Item2));
-            result.Add((startPos.Item1 - 1, startPos.Item2));
-
-            if (isSente)
-            {
-                result.Add((startPos.Item1 + 1, startPos.Item2 - 1));
-                result.Add((startPos.Item1 - 1, startPos.Item2 - 1));
-            }
-            else
-            {
-                result.Add((startPos.Item1 + 1, startPos.Item2 + 1));
-                result.Add((startPos.Item1 - 1, startPos.Item2 + 1));
-            }
-
-
-            return result;
+            return move.Move(startPos, isSente);
         }
 
         public List<(int, int)> Move((int, int) startPos, bool isSente)
         {
-            throw new NotImplementedException();
+            List<(int, int)> result = new List<(int, int)>();
+
+
+            (int, int) tmpPos = startPos;
+
+
+            while (tmpPos.Item1 < 9 && tmpPos.Item1 >= 0)
+            {
+                if (isSente)
+                {
+                    tmpPos = (tmpPos.Item1 - 1, tmpPos.Item2);
+                }
+                else
+                {
+                    tmpPos = (tmpPos.Item1 + 1, tmpPos.Item2);
+                }
+                result.Add(tmpPos);
+            }
+
+            return result;
         }
     }
 }

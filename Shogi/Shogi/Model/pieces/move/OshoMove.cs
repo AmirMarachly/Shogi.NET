@@ -21,7 +21,7 @@ namespace Shogi.Model.pieces.move
             {
                 for (int j = -1; j < 2; j++)
                 {
-                    if (i != 0 && j != 0)
+                    if (!(i == 0 && j == 0))
                         result.Add((startPos.Item1 + i, startPos.Item2 + j));
                 }
 

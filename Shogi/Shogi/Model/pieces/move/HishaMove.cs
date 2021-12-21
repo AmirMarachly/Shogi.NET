@@ -24,16 +24,24 @@ namespace Shogi.Model.pieces.move
         {
             List<(int, int)> result = new List<(int, int)>();
 
-            for (int i = startPos.Item1 - 9; i < 9 - startPos.Item1; i++)
-            {
-                if (i != 0)
-                    result.Add((startPos.Item1 + i, startPos.Item2));
-            }
+            (int, int)[] directions = new (int, int)[4];
 
-            for (int i = startPos.Item2 - 9; i < 9 - startPos.Item2; i++)
+            directions[0] = (-1, 0);
+            directions[1] = (1, 0);
+            directions[2] = (0, 1);
+            directions[3] = (0, -1);
+
+            (int, int) tmpPos = startPos;
+
+            for (int i = 0; i < directions.Length; i++)
             {
-                if (i != 0)
-                    result.Add((startPos.Item1, startPos.Item2 + i));
+                while (tmpPos.Item1 < 9 && tmpPos.Item1 >= 0 && tmpPos.Item2 < 9 && tmpPos.Item2 >= 0)
+                {
+                    tmpPos = (tmpPos.Item1 + directions[i].Item1, tmpPos.Item2 + directions[i].Item2);
+                    result.Add(tmpPos);
+                }
+
+                tmpPos = startPos;
             }
 
             return result;

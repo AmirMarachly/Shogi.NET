@@ -25,13 +25,13 @@ namespace Shogi.Model.pieces.move
 
             if (isSente)
             {
-                result.Add((startPos.Item1 + 1, startPos.Item2 - 1));
+                result.Add((startPos.Item1 - 1, startPos.Item2 + 1));
                 result.Add((startPos.Item1 - 1, startPos.Item2 - 1));
             }
             else
             {
                 result.Add((startPos.Item1 + 1, startPos.Item2 + 1));
-                result.Add((startPos.Item1 - 1, startPos.Item2 + 1));
+                result.Add((startPos.Item1 + 1, startPos.Item2 - 1));
             }
 
 

@@ -10,27 +10,9 @@ namespace Shogi.Model.pieces.move
     {
         public List<(int, int)> EvolvedMove((int, int) startPos, bool isSente)
         {
-            List<(int, int)> result = new List<(int, int)>();
+            IMove move = new KinshoMove();
 
-            result.Add((startPos.Item1, startPos.Item2 + 1));
-            result.Add((startPos.Item1, startPos.Item2 - 1));
-
-            result.Add((startPos.Item1 + 1, startPos.Item2));
-            result.Add((startPos.Item1 - 1, startPos.Item2));
-            
-            if (isSente)
-            {
-                result.Add((startPos.Item1 + 1, startPos.Item2 - 1));
-                result.Add((startPos.Item1 - 1, startPos.Item2 - 1));
-            }
-            else
-            {
-                result.Add((startPos.Item1 + 1, startPos.Item2 + 1));
-                result.Add((startPos.Item1 - 1, startPos.Item2 + 1));
-            }
-            
-
-            return result;
+            return move.Move(startPos, isSente);
 
         }
 
@@ -40,11 +22,11 @@ namespace Shogi.Model.pieces.move
 
             if (isSente)
             {
-                result.Add((startPos.Item1, startPos.Item2 - 1));
+                result.Add((startPos.Item1 - 1, startPos.Item2));
             }
             else
             {
-                result.Add((startPos.Item1, startPos.Item2 + 1));
+                result.Add((startPos.Item1 + 1, startPos.Item2));
             }
             
 
