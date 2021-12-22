@@ -159,21 +159,8 @@ namespace Shogi.ViewModel
                 }
             }
 
-            List<Cell> uniqueSenteHand = sente.PiecesInHand
-                .GroupBy(p => p.PieceType)
-                .Select(g => g.FirstOrDefault())
-                .Select(p => (Cell)p)
-                .ToList();
-
-            SenteHand = new ObservableCollection<Cell>(uniqueSenteHand);
-
-            List<Cell> uniqueGoteHand = gote.PiecesInHand
-                .GroupBy(p => p.PieceType)
-                .Select(g => g.FirstOrDefault())
-                .Select(p => (Cell)p)
-                .ToList();
-
-            GoteHand = new ObservableCollection<Cell>(uniqueGoteHand);
+            SenteHand = new ObservableCollection<Cell>(sente.PiecesInHand.ConvertAll(p => (Cell) p));
+            GoteHand = new ObservableCollection<Cell>(gote.PiecesInHand.ConvertAll(p => (Cell)p));
 
             RefreshBoard();
         }
