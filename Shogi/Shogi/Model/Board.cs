@@ -133,15 +133,15 @@ namespace Shogi.Model
             if (otherPiece != null && otherPiece.Owner != player)
             {
                 otherPiece.HasBeenEat(player);
-                piece.Move(nextPos);
                 board[piece.Pos.Item1, piece.Pos.Item2] = null;
+                piece.Move(nextPos);
                 board[nextPos.Item1, nextPos.Item2] = piece;
                 return true;
             }
             else if (otherPiece == null)
             {
-                piece.Move(nextPos);
                 board[piece.Pos.Item1, piece.Pos.Item2] = null;
+                piece.Move(nextPos);
                 board[nextPos.Item1, nextPos.Item2] = piece;
                 return true;
             }

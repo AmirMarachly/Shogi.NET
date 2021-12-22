@@ -32,15 +32,23 @@
             
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="LightGreen"/>
+                    <Setter Property="Background" Value="LightBlue"/>
                 </Trigger>
                 
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="LightBlue"/>
+                    <Setter Property="Background" Value="LightCyan"/>
                 </Trigger>
 
-                <DataTrigger Binding="{Binding IsHighlighted}" Value="true">
+                <DataTrigger Binding="{Binding IsSelected}" Value="true">
+                    <Setter Property="Background" Value="LightBlue"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding IsAvaibleMove}" Value="true">
                     <Setter Property="Background" Value="LightGreen"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding IsAttackMove}" Value="true">
+                    <Setter Property="Background" Value="LightCoral"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -55,8 +63,8 @@
             <ItemsControl ItemsSource="{Binding GoteHand, Mode=OneWay}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="4" Columns="4"
-                                     Width="200" Height="200"
+                        <UniformGrid Rows="5" Columns="5"
+                                     Width="240" Height="240"
                                      Margin="20, 20, 0, 20"
                                      VerticalAlignment="Top"/>
                     </ItemsPanelTemplate>
@@ -78,14 +86,14 @@
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Rows="9" Columns="9"
-                                         Width="500" Height="500"/>
+                                         Width="540" Height="540"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="Black" BorderThickness="0.5">
-                                <Button Command="{Binding DataContext.OnGridClicked,
+                                <Button Command="{Binding DataContext.OnBoardClicked,
                                                   RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                         CommandParameter="{Binding}">
 
@@ -102,7 +110,7 @@
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Rows="4" Columns="4"
-                                     Width="200" Height="200"
+                                     Width="240" Height="240"
                                      Margin="0, 20, 20, 20"
                                      VerticalAlignment="Bottom"/>
                     </ItemsPanelTemplate>
