@@ -40,10 +40,12 @@ namespace Shogi.Model
             }
         }
 
-        public Board(Player p1, Player p2, int _size = 9)
+        public Board(Player _p1, Player _p2, int _size = 9)
         {
             size = _size;
             board = new Piece[size, size];
+            p1 = _p1;
+            p2 = _p2;
             Init(p1, p2);
         }
 
@@ -212,22 +214,17 @@ namespace Shogi.Model
 
             tmp = osho.GetPossibleMove(this);
 
-            List<(int, int)> oshoPossibleMove = tmp["availableMove"];
+            List<(int, int)> oshoPossibleMove = tmp["avaibleMove"];
             oshoPossibleMove.AddRange(tmp["attackMove"]);
             oshoPossibleMove.Add(osho.Pos);
 
             tmp = gyokusho.GetPossibleMove(this);
 
-            List<(int, int)> gyokushoPossibleMove = tmp["availableMove"];
+            List<(int, int)> gyokushoPossibleMove = tmp["avaibleMove"];
             gyokushoPossibleMove.AddRange(tmp["attackMove"]);
             gyokushoPossibleMove.Add(gyokusho.Pos);
 
-            List<(int, int)> allMovePossible = new List<(int, int)>();
-            foreach (Piece piece in osho.Owner.PiecesOnBoard)
-            {
-                tmp = piece.GetPossibleMove(this);
-                allMovePossible.AddRange(tmp["availableMove"]);
-            }
+            List<(int, int)> allMovePossible = osho.Owner.GetHoldCell(this);
 
             foreach ((int,int) coor in gyokushoPossibleMove)
             { 
@@ -238,12 +235,7 @@ namespace Shogi.Model
                 }
             }
 
-            allMovePossible.Clear();
-            foreach (Piece piece in osho.Owner.PiecesOnBoard)
-            {
-                tmp = piece.GetPossibleMove(this);
-                allMovePossible.AddRange(tmp["availableMove"]);
-            }
+            allMovePossible = gyokusho.Owner.GetHoldCell(this);
 
             foreach ((int, int) coor in oshoPossibleMove)
             {

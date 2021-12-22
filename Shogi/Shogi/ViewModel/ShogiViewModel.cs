@@ -24,7 +24,30 @@ namespace Shogi.ViewModel
                 set;
             }
 
-            public bool IsHighlighted
+            public static explicit operator Cell(Piece p)
+            {
+                return new Cell { Piece = p, Index = p.Pos.Item1 * 9 + p.Pos.Item2 };
+            }
+
+            public int Index
+            {
+                get;
+                set;
+            }
+
+            public bool IsAvaibleMove
+            {
+                get;
+                set;
+            }
+
+            public bool IsAttackMove
+            {
+                get;
+                set;
+            }
+
+            public bool IsSelected
             {
                 get;
                 set;
@@ -79,24 +102,26 @@ namespace Shogi.ViewModel
             }
         }
 
-        public ICommand OnGridClicked
+        public ICommand OnBoardClicked
         {
             get 
             {
-                return new RelayCommand(GridClicked);
+                return new RelayCommand(BoardClicked);
             }
         }
 
-        private Player player1;
-        private Player player2;
+        private Player sente;
+        private Player gote;
         private Board board;
+
+        private Cell selectedCell;
 
         public ShogiViewModel()
         {
-            player1 = new Player("Amir", true, true);
-            player2 = new Player("Ulys", false, false);
+            sente = new Player("Amir", true, true);
+            gote = new Player("Ulys", false, false);
 
-            board = new Board(player1, player2);
+            board = new Board(sente, gote);
             InitBoard();
         }
 
@@ -117,7 +142,7 @@ namespace Shogi.ViewModel
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    ObservableBoard.Add(new Cell() { Piece = board[i, j] });
+                    ObservableBoard.Add(new Cell() { Piece = board[i, j], Index = i * 9 + j});
                 }
             }
 
@@ -130,9 +155,25 @@ namespace Shogi.ViewModel
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    ObservableBoard[i * 9 + j].Piece = board[j, i];
+                    ObservableBoard[i * 9 + j].Piece = board[i, j];
                 }
             }
+
+            List<Cell> uniqueSenteHand = sente.PiecesInHand
+                .GroupBy(p => p.PieceType)
+                .Select(g => g.FirstOrDefault())
+                .Select(p => (Cell)p)
+                .ToList();
+
+            SenteHand = new ObservableCollection<Cell>(uniqueSenteHand);
+
+            List<Cell> uniqueGoteHand = gote.PiecesInHand
+                .GroupBy(p => p.PieceType)
+                .Select(g => g.FirstOrDefault())
+                .Select(p => (Cell)p)
+                .ToList();
+
+            GoteHand = new ObservableCollection<Cell>(uniqueGoteHand);
 
             RefreshBoard();
         }
@@ -141,11 +182,13 @@ namespace Shogi.ViewModel
         {
             foreach (Cell cell in ObservableBoard)
             {
-                cell.IsHighlighted = false;
+                cell.IsSelected = false;
+                cell.IsAvaibleMove = false;
+                cell.IsAttackMove = false;
             }
         }
 
-        private void GridClicked(object sender)
+        private void BoardClicked(object sender)
         {
             Cell cell = sender as Cell;
 
@@ -154,17 +197,37 @@ namespace Shogi.ViewModel
                 return;
             }
 
+            if (cell.IsAvaibleMove || cell.IsAttackMove)
+            {
+                board.MoveAPiece(selectedCell.Piece, (cell.Index / 9, cell.Index % 9));
+                board.CheckCheckmate();
+
+                UpdateBoard();
+                ResetHighlight();
+
+                return;
+            }
+
             ResetHighlight();
-            var moves = cell.Piece.GetPossibleMove(board);
+
+            if (cell.Piece == null)
+            {
+                return;
+            }
+
+            cell.IsSelected = true;
+            selectedCell = cell;
+
+            Dictionary<string, List<(int, int)>> moves = cell.Piece.GetPossibleMove(board);
 
             foreach ((int, int) move in moves["avaibleMove"])
             {
-                ObservableBoard[move.Item1 * 9 + move.Item2].IsHighlighted = true;
+                ObservableBoard[move.Item1 * 9 + move.Item2].IsAvaibleMove = true;
             }
 
             foreach ((int, int) move in moves["attackMove"])
             {
-                ObservableBoard[move.Item1 * 9 + move.Item2].IsHighlighted = true;
+                ObservableBoard[move.Item1 * 9 + move.Item2].IsAttackMove = true;
             }
 
             RefreshBoard();

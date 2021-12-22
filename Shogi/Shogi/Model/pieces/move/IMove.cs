@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shogi.Model.pieces
 {
-    interface IMove
+    public interface IMove
     {
         List<(int,int)> Move((int,int) startPos, Board board,bool isSente);
         List<(int, int)> EvolvedMove((int, int) startPos, Board board, bool isSente);

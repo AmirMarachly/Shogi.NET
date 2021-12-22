@@ -9,7 +9,11 @@ namespace Shogi.Model.pieces
     public class Piece
     {
 
-        private IMove move;
+        private IMove moveStrategie;
+        public IMove MoveStrategie
+        {
+            get { return moveStrategie; }
+        }
         private PiecesType pieceType;
         public PiecesType PieceType
         {
@@ -45,7 +49,7 @@ namespace Shogi.Model.pieces
 
             Type moveClass = Type.GetType("Shogi.Model.pieces.move." + typeMove);
 
-            move = Activator.CreateInstance(moveClass, null) as IMove;
+            moveStrategie = Activator.CreateInstance(moveClass, null) as IMove;
 
             owner.PiecesOnBoard.Add(this);
         }
@@ -57,11 +61,11 @@ namespace Shogi.Model.pieces
 
             if (!isEvolved)
             {
-                possibleMove = move.Move(pos, board, owner.IsSente);
+                possibleMove = moveStrategie.Move(pos, board, owner.IsSente);
             }
             else
             {
-                possibleMove = move.EvolvedMove(pos, board, owner.IsSente);
+                possibleMove = moveStrategie.EvolvedMove(pos, board, owner.IsSente);
             }
             
             List<(int, int)> avaibleMove = possibleMove.ConvertAll(move => move);

@@ -49,6 +49,24 @@ namespace Shogi.Model
             piecesInHand = new List<Piece>();
         }
 
+        public List<(int, int)> GetHoldCell(Board board)
+        {
+            List<(int, int)> result = new List<(int, int)>();
+
+            foreach (Piece piece in piecesOnBoard)
+            {
+                if (piece.IsEvolved)
+                {
+                    result.AddRange(piece.MoveStrategie.EvolvedMove(piece.Pos, board, IsSente));
+                }
+                else
+                {
+                    result.AddRange(piece.MoveStrategie.Move(piece.Pos, board, IsSente));
+                }
+            }
+
+            return result;
+        }
 
         public void hasPlayed()
         {
