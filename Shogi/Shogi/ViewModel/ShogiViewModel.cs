@@ -194,12 +194,12 @@ namespace Shogi.ViewModel
                 return;
             }
 
-            ResetHighlight();
-
             if (cell.Piece == null)
             {
                 return;
             }
+
+            ResetHighlight();
 
             cell.IsSelected = true;
             selectedCell = cell;
