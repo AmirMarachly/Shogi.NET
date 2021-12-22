@@ -124,5 +124,25 @@ namespace Shogi.Model.pieces
             }
             return this;
         }
+
+        public bool CanEvolve()
+        {
+            if (owner.IsSente)
+            {
+                if (pos.Item1 <= 2)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (pos.Item1 >= 6)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

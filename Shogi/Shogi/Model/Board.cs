@@ -9,6 +9,10 @@ namespace Shogi.Model
 {
     public class Board
     {
+
+        private Player p1;
+        private Player p2;
+
         private int size;
         public int Size
         {
@@ -191,6 +195,75 @@ namespace Shogi.Model
             }
 
             return false;
+        }
+
+
+        public Player CheckCheckmate()
+        {
+            Piece osho = p1.PiecesOnBoard.Where(p => p.PieceType == PiecesType.Osho)
+                                         .FirstOrDefault();
+            Piece gyokusho = p2.PiecesOnBoard.Where(p => p.PieceType == PiecesType.Gyokusho)
+                                         .FirstOrDefault();
+
+            bool oshoIsCheckmate = true;
+            bool gyokushoIsCheckmate = true;
+
+            Dictionary<string, List<(int, int)>> tmp;
+
+            tmp = osho.GetPossibleMove(this);
+
+            List<(int, int)> oshoPossibleMove = tmp["availableMove"];
+            oshoPossibleMove.AddRange(tmp["attackMove"]);
+            oshoPossibleMove.Add(osho.Pos);
+
+            tmp = gyokusho.GetPossibleMove(this);
+
+            List<(int, int)> gyokushoPossibleMove = tmp["availableMove"];
+            gyokushoPossibleMove.AddRange(tmp["attackMove"]);
+            gyokushoPossibleMove.Add(gyokusho.Pos);
+
+            List<(int, int)> allMovePossible = new List<(int, int)>();
+            foreach (Piece piece in osho.Owner.PiecesOnBoard)
+            {
+                tmp = piece.GetPossibleMove(this);
+                allMovePossible.AddRange(tmp["availableMove"]);
+            }
+
+            foreach ((int,int) coor in gyokushoPossibleMove)
+            { 
+                if (!allMovePossible.Contains(coor))
+                {
+                    gyokushoIsCheckmate = false;
+                    break;
+                }
+            }
+
+            allMovePossible.Clear();
+            foreach (Piece piece in osho.Owner.PiecesOnBoard)
+            {
+                tmp = piece.GetPossibleMove(this);
+                allMovePossible.AddRange(tmp["availableMove"]);
+            }
+
+            foreach ((int, int) coor in oshoPossibleMove)
+            {
+                if (!allMovePossible.Contains(coor))
+                {
+                    oshoIsCheckmate = false;
+                    break;
+                }
+            }
+
+            if(oshoIsCheckmate)
+            {
+                return osho.Owner;
+            }
+            else if (gyokushoIsCheckmate)
+            {
+                return gyokusho.Owner;
+            }
+
+            return null;
         }
     }
 }
