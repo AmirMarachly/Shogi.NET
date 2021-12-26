@@ -102,11 +102,35 @@ namespace Shogi.ViewModel
             }
         }
 
+        private bool canUpgrade;
+
+        public bool CanUpgrade
+        {
+            get
+            {
+                return canUpgrade;
+            }
+
+            set
+            {
+                canUpgrade = value;
+                OnPropertyChanged("CanUpgrade");
+            }
+        }
+
         public ICommand OnBoardClicked
         {
             get 
             {
                 return new RelayCommand(BoardClicked);
+            }
+        }
+
+        public ICommand OnHandClicked
+        {
+            get
+            {
+                return new RelayCommand(HandClicked);
             }
         }
 
@@ -199,6 +223,11 @@ namespace Shogi.ViewModel
                 return;
             }
 
+            if (!cell.Piece.Owner.IsPlaying)
+            {
+                return;
+            }
+
             ResetHighlight();
 
             cell.IsSelected = true;
@@ -217,6 +246,25 @@ namespace Shogi.ViewModel
             }
 
             RefreshBoard();
+        }
+
+        private void HandClicked(object sender)
+        {
+            Cell cell = sender as Cell;
+
+            if (cell == null)
+            {
+                return;
+            }
+
+            if (cell.Piece == null)
+            {
+                return;
+            }
+
+            ResetHighlight();
+
+            MessageBox.Show($"Is Sente: {cell.Piece.Owner.IsSente}");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

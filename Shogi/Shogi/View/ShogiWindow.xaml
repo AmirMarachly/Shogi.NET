@@ -6,132 +6,19 @@
         xmlns:local="clr-namespace:Shogi.View"
         xmlns:vm="clr-namespace:Shogi.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="ShogiWindow" Height="450" Width="800">
 
     <Window.DataContext>
         <vm:ShogiViewModel/>
     </Window.DataContext>
 
-    <Window.Resources>
-        <local:PieceToImageConverter x:Key="PieceToImageConverter"/>
-        <local:HandToRowsConverter x:Key="HandToRowsConverter"/>
-
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="Transparent"/>
-            
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="Transparent">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="LightBlue"/>
-                </Trigger>
-                
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="LightCyan"/>
-                </Trigger>
-
-                <DataTrigger Binding="{Binding IsSelected}" Value="true">
-                    <Setter Property="Background" Value="LightBlue"/>
-                </DataTrigger>
-
-                <DataTrigger Binding="{Binding IsAvaibleMove}" Value="true">
-                    <Setter Property="Background" Value="LightGreen"/>
-                </DataTrigger>
-
-                <DataTrigger Binding="{Binding IsAttackMove}" Value="true">
-                    <Setter Property="Background" Value="LightCoral"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
-
     <Window.Background>
         <ImageBrush ImageSource="/Shogi;component/Resources/Background.jpg"/>
     </Window.Background>
 
-    <Viewbox Stretch="Uniform">
-        <StackPanel Orientation="Horizontal">
-            <ItemsControl ItemsSource="{Binding GoteHand, Mode=OneWay}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="5"
-                                     Rows="{Binding DataContext.GoteHand,
-                                            RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}},
-                                            Converter={StaticResource HandToRowsConverter}}"
-                                     Width="200"
-                                     Margin="20, 20, 0, 20"
-                                     VerticalAlignment="Top"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button>
-                            <Image Source="{Binding Mode=OneWay,
-                                            Converter={StaticResource PieceToImageConverter}}"/>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <Border BorderBrush="Black" BorderThickness="0.5"
-                    Margin="20, 20, 20, 20">
-                <ItemsControl ItemsSource="{Binding ObservableBoard, Mode=OneWay}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="9" Rows="9" 
-                                         Width="500" Height="500"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderBrush="Black" BorderThickness="0.5">
-                                <Button Command="{Binding DataContext.OnBoardClicked,
-                                                  RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                        CommandParameter="{Binding}">
-
-                                    <Image Source="{Binding Mode=OneWay,
-                                                    Converter={StaticResource PieceToImageConverter}}"/>
-                                </Button>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Border>
-
-            <ItemsControl ItemsSource="{Binding SenteHand, Mode=OneWay}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="5"
-                                     Rows="{Binding DataContext.SenteHand,
-                                            RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}},
-                                            Converter={StaticResource HandToRowsConverter}}"
-                                     Width="200"
-                                     Margin="0, 20, 20, 20"
-                                     VerticalAlignment="Bottom"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button>
-                            <Image Source="{Binding Mode=OneWay,
-                                            Converter={StaticResource PieceToImageConverter}}"/>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
-    </Viewbox>
+    <Grid>
+        <Viewbox Stretch="Uniform">
+            <local:ShogiBoard/>
+        </Viewbox>
+    </Grid>
 </Window>
