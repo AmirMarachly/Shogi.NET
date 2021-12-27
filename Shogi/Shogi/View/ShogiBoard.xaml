@@ -10,10 +10,11 @@
     <UserControl.Resources>
         <local:PieceToImageConverter x:Key="PieceToImageConverter"/>
         <local:HandToRowsConverter x:Key="HandToRowsConverter"/>
+        <local:PlayerToTurnConverter x:Key="PlayerToTurnConverter"/>
 
         <Style x:Key="UpgradeStyle" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="LightGray"/>
-            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="Visibility" Value="Visible"/>
 
             <Setter Property="Template">
                 <Setter.Value>
@@ -137,12 +138,11 @@
             </Border>
 
             <DockPanel>
-                <Button DockPanel.Dock="Top"
-                        Style="{StaticResource UpgradeStyle}"
-                        Margin="0, 20, 20, 20"
-                        Height="30"
-                        Content="Upgrade">
-                </Button>
+                <Button Style="{StaticResource UpgradeStyle}"
+                            DockPanel.Dock="Top"
+                            Margin="0, 20, 20, 0"
+                            Height="30"
+                            Content="Upgrade"/>
 
                 <ItemsControl DockPanel.Dock="Bottom" ItemsSource="{Binding SenteHand, Mode=OneWay}">
                     <ItemsControl.ItemsPanel>

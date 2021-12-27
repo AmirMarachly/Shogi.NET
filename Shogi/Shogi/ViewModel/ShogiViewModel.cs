@@ -118,6 +118,14 @@ namespace Shogi.ViewModel
             }
         }
 
+        public string CurrentPlayer
+        {
+            get
+            {
+                return sente.IsPlaying ? "Sente" : "Gote";
+            }
+        }
+
         public ICommand OnBoardClicked
         {
             get 
@@ -139,6 +147,7 @@ namespace Shogi.ViewModel
         private Board board;
 
         private Cell selectedCell;
+        private bool selectedFromHand;
 
         public ShogiViewModel()
         {
@@ -210,7 +219,18 @@ namespace Shogi.ViewModel
 
             if (cell.IsAvaibleMove || cell.IsAttackMove)
             {
-                board.MoveAPiece(selectedCell.Piece, (cell.Index / 9, cell.Index % 9));
+                if (selectedFromHand)
+                {
+                    board.ParachuteAPiece(selectedCell.Piece, (cell.Index / 9, cell.Index % 9));
+                }
+                else
+                {
+                    board.MoveAPiece(selectedCell.Piece, (cell.Index / 9, cell.Index % 9));
+                }
+
+                sente.HasPlayed();
+                gote.HasPlayed();
+                OnPropertyChanged("CurrentPlayer");
 
                 UpdateBoard();
                 ResetHighlight();
@@ -232,6 +252,7 @@ namespace Shogi.ViewModel
 
             cell.IsSelected = true;
             selectedCell = cell;
+            selectedFromHand = false;
 
             Dictionary<string, List<(int, int)>> moves = cell.Piece.GetPossibleMove(board);
 
@@ -262,9 +283,25 @@ namespace Shogi.ViewModel
                 return;
             }
 
+            if (!cell.Piece.Owner.IsPlaying)
+            {
+                return;
+            }
+
             ResetHighlight();
 
-            MessageBox.Show($"Is Sente: {cell.Piece.Owner.IsSente}");
+            cell.IsSelected = true;
+            selectedCell = cell;
+            selectedFromHand = true;
+
+            List<(int, int)> moves = board.GetEmptyCell();
+
+            foreach ((int, int) move in moves)
+            {
+                ObservableBoard[move.Item1 * 9 + move.Item2].IsAvaibleMove = true;
+            }
+
+            RefreshBoard();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

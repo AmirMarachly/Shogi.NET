@@ -50,7 +50,7 @@ namespace Shogi.Model
         }
 
 
-        public void hasPlayed()
+        public void HasPlayed()
         {
             isPlaying = !isPlaying;
         }
