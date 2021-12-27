@@ -240,6 +240,20 @@ namespace Shogi.ViewModel
                 cell.IsAvaibleMove = false;
                 cell.IsAttackMove = false;
             }
+
+            foreach (Cell cell in SenteHand)
+            {
+                cell.IsSelected = false;
+                cell.IsAvaibleMove = false;
+                cell.IsAttackMove = false;
+            }
+
+            foreach (Cell cell in GoteHand)
+            {
+                cell.IsSelected = false;
+                cell.IsAvaibleMove = false;
+                cell.IsAttackMove = false;
+            }
         }
 
         private void BoardClicked(object sender)
