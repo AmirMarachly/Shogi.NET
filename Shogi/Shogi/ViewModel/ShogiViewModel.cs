@@ -54,6 +54,22 @@ namespace Shogi.ViewModel
             }
         }
 
+        private bool isOnMenu;
+
+        public bool IsOnMenu
+        {
+            get
+            {
+                return isOnMenu;
+            }
+
+            set
+            {
+                isOnMenu = value;
+                OnPropertyChanged("IsOnMenu");
+            }
+        }
+
         private ObservableCollection<Cell> observableBoard;
 
         public ObservableCollection<Cell> ObservableBoard
@@ -126,6 +142,14 @@ namespace Shogi.ViewModel
             }
         }
 
+        public ICommand OnPlayClicked
+        {
+            get
+            {
+                return new RelayCommand(o => IsOnMenu = false);
+            }
+        }
+
         public ICommand OnBoardClicked
         {
             get 
@@ -142,17 +166,27 @@ namespace Shogi.ViewModel
             }
         }
 
+        public ICommand OnPromoteClicked
+        {
+            get
+            {
+                return new RelayCommand(PromoteClicked);
+            }
+        }
+
         private Player sente;
         private Player gote;
         private Board board;
 
-        private Cell selectedCell;
+        private Piece selectedPiece;
         private bool selectedFromHand;
 
         public ShogiViewModel()
         {
-            sente = new Player("Amir", true, true);
-            gote = new Player("Ulys", false, false);
+            isOnMenu = true;
+
+            sente = new Player("sente", true, true);
+            gote = new Player("gote", false, false);
 
             board = new Board(sente, gote);
             InitBoard();
@@ -221,11 +255,11 @@ namespace Shogi.ViewModel
             {
                 if (selectedFromHand)
                 {
-                    board.ParachuteAPiece(selectedCell.Piece, (cell.Index / 9, cell.Index % 9));
+                    board.ParachuteAPiece(selectedPiece, (cell.Index / 9, cell.Index % 9));
                 }
                 else
                 {
-                    board.MoveAPiece(selectedCell.Piece, (cell.Index / 9, cell.Index % 9));
+                    board.MoveAPiece(selectedPiece, (cell.Index / 9, cell.Index % 9));
                 }
 
                 sente.HasPlayed();
@@ -234,6 +268,8 @@ namespace Shogi.ViewModel
 
                 UpdateBoard();
                 ResetHighlight();
+
+                cell.IsSelected = true;
 
                 return;
             }
@@ -251,7 +287,7 @@ namespace Shogi.ViewModel
             ResetHighlight();
 
             cell.IsSelected = true;
-            selectedCell = cell;
+            selectedPiece = cell.Piece;
             selectedFromHand = false;
 
             Dictionary<string, List<(int, int)>> moves = cell.Piece.GetPossibleMove(board);
@@ -291,7 +327,7 @@ namespace Shogi.ViewModel
             ResetHighlight();
 
             cell.IsSelected = true;
-            selectedCell = cell;
+            selectedPiece = cell.Piece;
             selectedFromHand = true;
 
             List<(int, int)> moves = board.GetEmptyCell();
@@ -302,6 +338,12 @@ namespace Shogi.ViewModel
             }
 
             RefreshBoard();
+        }
+
+        private void PromoteClicked(object sender)
+        {
+            selectedPiece.Evolve();
+            UpdateBoard();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

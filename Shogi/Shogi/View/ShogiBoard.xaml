@@ -13,7 +13,7 @@
         <local:PlayerToTurnConverter x:Key="PlayerToTurnConverter"/>
 
         <Style x:Key="UpgradeStyle" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="LightGray"/>
+            <Setter Property="Background" Value="#fff7b7"/>
             <Setter Property="Visibility" Value="Visible"/>
 
             <Setter Property="Template">
@@ -142,7 +142,9 @@
                             DockPanel.Dock="Top"
                             Margin="0, 20, 20, 0"
                             Height="30"
-                            Content="Upgrade"/>
+                            FontSize="20"
+                            Content="promote"
+                            Command="{Binding OnPromoteClicked}"/>
 
                 <ItemsControl DockPanel.Dock="Bottom" ItemsSource="{Binding SenteHand, Mode=OneWay}">
                     <ItemsControl.ItemsPanel>

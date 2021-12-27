@@ -12,12 +12,46 @@
         <vm:ShogiViewModel/>
     </Window.DataContext>
 
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="FontFamily" Value="/Shogi;component/Resources/#Antarctica UltExp"/>
+        </Style>
+    </Window.Style>
+
     <Window.Background>
         <ImageBrush ImageSource="/Shogi;component/Resources/Background.jpg"/>
     </Window.Background>
 
     <Grid>
         <Viewbox Stretch="Uniform">
+            <Viewbox.Style>
+                <Style TargetType="{x:Type Viewbox}">
+                    <Setter Property="Visibility" Value="Hidden"/>
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsOnMenu}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Viewbox.Style>
+            
+            <local:ShogiMenu/>
+        </Viewbox>
+
+        <Viewbox Stretch="Uniform">
+            <Viewbox.Style>
+                <Style TargetType="{x:Type Viewbox}">
+                    <Setter Property="Visibility" Value="Hidden"/>
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsOnMenu}" Value="False">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Viewbox.Style>
+            
             <local:ShogiBoard/>
         </Viewbox>
     </Grid>
