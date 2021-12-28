@@ -7,35 +7,6 @@
         Height="500" Width="500"
         mc:Ignorable="d">
 
-    <UserControl.Resources>
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="#fff7b7"/>
-            <Setter Property="Visibility" Value="Visible"/>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="Transparent">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="LightBlue"/>
-                </Trigger>
-
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="LightCyan"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
-
     <DockPanel>
         <Button DockPanel.Dock="Bottom"
                 Content="play"

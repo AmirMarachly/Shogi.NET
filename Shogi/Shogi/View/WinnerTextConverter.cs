@@ -12,15 +12,15 @@ using static Shogi.ViewModel.ShogiViewModel;
 
 namespace Shogi.View
 {
-    class PlayerToTurnConverter : IValueConverter
+    class WinnerTextConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string player = value as string;
+            string winner = value as string;
 
-            if (player != null)
+            if (winner != null)
             {
-                return $"{player}'s turn";
+                return $"{winner} win";
             }
 
             return "";

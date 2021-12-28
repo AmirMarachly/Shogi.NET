@@ -10,63 +10,32 @@
     <UserControl.Resources>
         <local:PieceToImageConverter x:Key="PieceToImageConverter"/>
         <local:HandToRowsConverter x:Key="HandToRowsConverter"/>
-        <local:PlayerToTurnConverter x:Key="PlayerToTurnConverter"/>
+        <local:WinnerTextConverter x:Key="WinnerTextConverter"/>
 
-        <Style x:Key="UpgradeStyle" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="#fff7b7"/>
+        <Style x:Key="WinStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="Visibility" Value="Visible"/>
 
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="Transparent">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-
             <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="LightBlue"/>
-                </Trigger>
-
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="LightCyan"/>
-                </Trigger>
-
-                <DataTrigger Binding="{Binding CanUpgrade}" Value="True">
-                    <Setter Property="Visibility" Value="Visible"/>
+                <DataTrigger Binding="{Binding Winner}" Value="">
+                    <Setter Property="Visibility" Value="Hidden"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-
-        <Style x:Key="PieceStyle" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="Transparent"/>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="Transparent">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        
+        <Style x:Key="UpgradeStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Visibility" Value="Hidden"/>
 
             <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="LightBlue"/>
-                </Trigger>
+                <DataTrigger Binding="{Binding CanUpgrade}" Value="True">
+                        <Setter Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="LightCyan"/>
-                </Trigger>
+        <Style x:Key="PieceStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Background" Value="Transparent"/>
 
+            <Style.Triggers>
                 <DataTrigger Binding="{Binding IsSelected}" Value="true">
                     <Setter Property="Background" Value="LightBlue"/>
                 </DataTrigger>
@@ -110,41 +79,57 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <Border BorderBrush="Black" BorderThickness="0.5"
-                    Margin="20, 20, 20, 20">
-                <ItemsControl ItemsSource="{Binding ObservableBoard, Mode=OneWay}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="9" Rows="9" 
-                                         Width="540" Height="540"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+            <Grid>
+                <Border BorderBrush="Black" BorderThickness="0.5"
+                        Margin="20, 20, 20, 20">
+                    <ItemsControl ItemsSource="{Binding ObservableBoard, Mode=OneWay}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="9" Rows="9" 
+                                             Width="540" Height="540"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderBrush="Black" BorderThickness="0.5">
-                                <Button Style="{StaticResource PieceStyle}"
-                                        Command="{Binding DataContext.OnBoardClicked,
-                                                  RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                        CommandParameter="{Binding}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Black" BorderThickness="0.5">
+                                    <Button Style="{StaticResource PieceStyle}"
+                                            Command="{Binding DataContext.OnBoardClicked,
+                                                      RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding}">
 
-                                    <Image Source="{Binding Mode=OneWay,
-                                                    Converter={StaticResource PieceToImageConverter}}"/>
-                                </Button>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Border>
+                                        <Image Source="{Binding Mode=OneWay,
+                                                        Converter={StaticResource PieceToImageConverter}}"/>
+                                    </Button>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+
+                <TextBlock Style="{StaticResource WinStyle}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="60"
+                           Text="{Binding Winner,
+                                  Converter={StaticResource WinnerTextConverter}}"/>
+            </Grid>
 
             <DockPanel>
+                <Button DockPanel.Dock="Top"
+                        Margin="0, 20, 20, 0"
+                        Height="30"
+                        FontSize="20"
+                        Content="menu"
+                        Command="{Binding OnMenuClicked}"/>
+
                 <Button Style="{StaticResource UpgradeStyle}"
-                            DockPanel.Dock="Top"
-                            Margin="0, 20, 20, 0"
-                            Height="30"
-                            FontSize="20"
-                            Content="promote"
-                            Command="{Binding OnPromoteClicked}"/>
+                        DockPanel.Dock="Top"
+                        Margin="0, 15, 20, 0"
+                        Height="30"
+                        FontSize="20"
+                        Content="promote"
+                        Command="{Binding OnPromoteClicked}"/>
 
                 <ItemsControl DockPanel.Dock="Bottom" ItemsSource="{Binding SenteHand, Mode=OneWay}">
                     <ItemsControl.ItemsPanel>

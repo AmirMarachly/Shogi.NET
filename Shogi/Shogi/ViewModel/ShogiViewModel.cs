@@ -54,7 +54,7 @@ namespace Shogi.ViewModel
             }
         }
 
-        private bool isOnMenu;
+        private bool isOnMenu = true;
 
         public bool IsOnMenu
         {
@@ -134,11 +134,27 @@ namespace Shogi.ViewModel
             }
         }
 
+        private string winner = "";
+
+        public string Winner
+        {
+            get
+            {
+                return winner;
+            }
+
+            set
+            {
+                winner = value;
+                OnPropertyChanged("Winner");
+            }
+        }
+
         public string CurrentPlayer
         {
             get
             {
-                return sente.IsPlaying ? "Sente" : "Gote";
+                return sente.IsPlaying ? sente.Name : gote.Name;
             }
         }
 
@@ -146,7 +162,15 @@ namespace Shogi.ViewModel
         {
             get
             {
-                return new RelayCommand(o => IsOnMenu = false);
+                return new RelayCommand(Init);
+            }
+        }
+
+        public ICommand OnMenuClicked
+        {
+            get
+            {
+                return new RelayCommand(o => IsOnMenu = true);
             }
         }
 
@@ -181,9 +205,9 @@ namespace Shogi.ViewModel
         private Piece selectedPiece;
         private bool selectedFromHand;
 
-        public ShogiViewModel()
+        public void Init(object sender)
         {
-            isOnMenu = true;
+            IsOnMenu = false;
 
             sente = new Player("sente", true, true);
             gote = new Player("gote", false, false);
