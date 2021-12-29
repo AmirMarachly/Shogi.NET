@@ -184,15 +184,17 @@ namespace Shogi.Model.pieces
 
         public bool CanPromote((int, int) nextPos)
         {
-            if (owner.IsSente && (nextPos.Item1 <= 2 || pos.Item1 <= 2))
+            if(pieceType != PiecesType.Osho && pieceType != PiecesType.Gyokusho && pieceType != PiecesType.Kinsho)
             {
-                return true;
+                if (owner.IsSente && (nextPos.Item1 <= 2 || pos.Item1 <= 2))
+                {
+                    return true;
+                }
+                else if (!owner.IsSente && (nextPos.Item1 >= 6 || pos.Item1 >= 6))
+                {
+                    return true;
+                }
             }
-            else if (!owner.IsSente && (nextPos.Item1 >= 6 || pos.Item1 >= 6))
-            {
-                return true;
-            }
-
             return false;
         }
 
