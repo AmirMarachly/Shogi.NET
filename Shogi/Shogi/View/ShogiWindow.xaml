@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:Shogi.View"
         xmlns:vm="clr-namespace:Shogi.ViewModel"
         mc:Ignorable="d"
-        Title="ShogiWindow" Height="450" Width="800">
+        Title="shōgi"
+        MinHeight="200" MinWidth="300"
+        Height="500" Width="800">
 
     <Window.DataContext>
         <vm:ShogiViewModel/>

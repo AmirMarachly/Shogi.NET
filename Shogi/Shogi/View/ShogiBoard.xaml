@@ -8,7 +8,7 @@
         mc:Ignorable="d">
 
     <UserControl.Resources>
-        <local:PieceToImageConverter x:Key="PieceToImageConverter"/>
+        <local:CellToImageConverter x:Key="CellToImageConverter"/>
         <local:HandToRowsConverter x:Key="HandToRowsConverter"/>
         <local:WinnerTextConverter x:Key="WinnerTextConverter"/>
 
@@ -37,15 +37,15 @@
 
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsSelected}" Value="true">
-                    <Setter Property="Background" Value="LightBlue"/>
+                    <Setter Property="Background" Value="#C2C7FE"/>
                 </DataTrigger>
 
                 <DataTrigger Binding="{Binding IsAvaibleMove}" Value="true">
-                    <Setter Property="Background" Value="LightGreen"/>
+                    <Setter Property="Background" Value="#C3FED4"/>
                 </DataTrigger>
 
                 <DataTrigger Binding="{Binding IsAttackMove}" Value="true">
-                    <Setter Property="Background" Value="LightCoral"/>
+                    <Setter Property="Background" Value="#FE8585"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -53,7 +53,7 @@
 
     <Viewbox Stretch="Uniform">
         <StackPanel Orientation="Horizontal">
-            <ItemsControl ItemsSource="{Binding GoteHand, Mode=OneWay}">
+            <ItemsControl ItemsSource="{Binding GoteHand}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Columns="5"
@@ -72,8 +72,7 @@
                                 Command="{Binding DataContext.OnHandClicked,
                                                   RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                 CommandParameter="{Binding}">
-                            <Image Source="{Binding Mode=OneWay,
-                                            Converter={StaticResource PieceToImageConverter}}"/>
+                            <Image Source="{Binding Converter={StaticResource CellToImageConverter}}"/>
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -82,7 +81,7 @@
             <Grid>
                 <Border BorderBrush="Black" BorderThickness="0.5"
                         Margin="20, 20, 20, 20">
-                    <ItemsControl ItemsSource="{Binding ObservableBoard, Mode=OneWay}">
+                    <ItemsControl ItemsSource="{Binding ObservableBoard}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <UniformGrid Columns="9" Rows="9" 
@@ -98,8 +97,7 @@
                                                       RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                             CommandParameter="{Binding}">
 
-                                        <Image Source="{Binding Mode=OneWay,
-                                                        Converter={StaticResource PieceToImageConverter}}"/>
+                                        <Image Source="{Binding Converter={StaticResource CellToImageConverter}}"/>
                                     </Button>
                                 </Border>
                             </DataTemplate>
@@ -131,7 +129,7 @@
                         Content="promote"
                         Command="{Binding OnPromoteClicked}"/>
 
-                <ItemsControl DockPanel.Dock="Bottom" ItemsSource="{Binding SenteHand, Mode=OneWay}">
+                <ItemsControl DockPanel.Dock="Bottom" ItemsSource="{Binding SenteHand}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Columns="5"
@@ -147,7 +145,7 @@
                             <Button Style="{StaticResource PieceStyle}"
                                     Command="{Binding DataContext.OnHandClicked, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                     CommandParameter="{Binding}">
-                                <Image Source="{Binding Converter={StaticResource PieceToImageConverter}, Mode=OneWay}"/>
+                                <Image Source="{Binding Converter={StaticResource CellToImageConverter}}"/>
                             </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
