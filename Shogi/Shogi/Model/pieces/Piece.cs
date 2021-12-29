@@ -125,7 +125,7 @@ namespace Shogi.Model.pieces
             return this;
         }
 
-        public List<(int,int)> GetPossibleParachute(Board board, Player oppent)
+        public List<(int,int)> GetPossibleParachute(Board board, Player opponnent)
         {
 
             List<(int, int)> result = board.GetEmptyCell();
@@ -154,13 +154,13 @@ namespace Shogi.Model.pieces
 
             if (pieceType == PiecesType.Fuhyo)
             {
-                if (oppent.IsSente && result.Contains((oppent.King.Pos.Item1 + 1, oppent.King.Pos.Item2)))
+                if (opponnent.IsSente && result.Contains((opponnent.King.Pos.Item1 + 1, opponnent.King.Pos.Item2)))
                 {
-                    result.Remove((oppent.King.Pos.Item1 + 1, oppent.King.Pos.Item2));
+                    result.Remove((opponnent.King.Pos.Item1 + 1, opponnent.King.Pos.Item2));
                 }
-                else if(result.Contains((oppent.King.Pos.Item1 - 1, oppent.King.Pos.Item2)))
+                else if(result.Contains((opponnent.King.Pos.Item1 - 1, opponnent.King.Pos.Item2)))
                 {
-                    result.Remove((oppent.King.Pos.Item1 - 1, oppent.King.Pos.Item2));
+                    result.Remove((opponnent.King.Pos.Item1 - 1, opponnent.King.Pos.Item2));
                 }
 
                 foreach (Piece piece in owner.PiecesOnBoard)
@@ -182,24 +182,55 @@ namespace Shogi.Model.pieces
             return result;
         }
 
-        public bool CanEvolve()
+        public bool CanPromote((int, int) nextPos)
+        {
+            if (owner.IsSente && (nextPos.Item1 >= 6 || pos.Item1 >= 6))
+            {
+                return true;
+            }
+            else if (!owner.IsSente && (nextPos.Item1 <= 2 || pos.Item1 <= 2))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void NeedPromote()
         {
             if (owner.IsSente)
             {
-                if (pos.Item1 <= 2)
+                if (pos.Item1 == 8)
                 {
-                    return true;
+                    if (pieceType == PiecesType.Fuhyo || pieceType == PiecesType.Kyosha ||
+                        pieceType == PiecesType.Keima)
+                    {
+                        Evolve();
+                    }
+                }
+
+                if (pos.Item1 == 7 && pieceType == PiecesType.Keima)
+                {
+                    Evolve();
                 }
             }
             else
             {
-                if (pos.Item1 >= 6)
+                if (pos.Item1 == 0)
                 {
-                    return true;
+                    if (pieceType == PiecesType.Fuhyo || pieceType == PiecesType.Kyosha ||
+                        pieceType == PiecesType.Keima)
+                    {
+                        Evolve();
+                    }
+                }
+
+                if (pos.Item1 == 1 && pieceType == PiecesType.Keima)
+                {
+                    Evolve();
                 }
             }
-
-            return false;
+            
         }
 
 
