@@ -336,7 +336,15 @@ namespace Shogi.ViewModel
 
                 OnPropertyChanged("Winner");
 
-                cell.IsSelected = true;
+                if (sente.HasLost() || gote.HasLost())
+                {
+                    CanPromote = false;
+                }
+                else
+                {
+                    cell.IsSelected = true;
+                }
+
                 return;
             }
 
@@ -375,6 +383,11 @@ namespace Shogi.ViewModel
 
         private void HandClicked(object sender)
         {
+            if (sente.HasLost() || gote.HasLost())
+            {
+                return;
+            }
+
             Cell cell = sender as Cell;
 
             if (cell == null)
