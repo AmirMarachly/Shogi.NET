@@ -23,7 +23,7 @@ namespace Shogi.Model
         private Piece[,] board;
         public Piece this[int i, int j]
         {
-            get 
+            get
             {
                 try
                 {
@@ -34,9 +34,9 @@ namespace Shogi.Model
                     return null;
                 }
             }
-            set 
+            set
             {
-                board[i,j] = value;
+                board[i, j] = value;
             }
         }
 
@@ -55,7 +55,7 @@ namespace Shogi.Model
             {
                 for (int j = 0; j < size; j++)
                 {
-                    board[i,j] = null;
+                    board[i, j] = null;
 
                     if (i > size / 2) p = p1;
 
@@ -80,7 +80,7 @@ namespace Shogi.Model
                                 board[i, j] = new Piece(PiecesType.Kinsho, p, (i, j));
                                 break;
                             case 4:
-                                if(p.IsSente)
+                                if (p.IsSente)
                                 {
                                     board[i, j] = new Piece(PiecesType.Osho, p, (i, j));
                                 }
@@ -108,11 +108,11 @@ namespace Shogi.Model
                     {
                         board[i, j] = new Piece(PiecesType.Fuhyo, p, (i, j));
                     }
-                    else if(i == 6)
+                    else if (i == 6)
                     {
                         board[i, j] = new Piece(PiecesType.Fuhyo, p, (i, j));
                     }
-                    else if(i == 7)
+                    else if (i == 7)
                     {
                         if (j == 1)
                         {
@@ -129,7 +129,7 @@ namespace Shogi.Model
 
         }
 
-        public bool MoveAPiece(Piece piece, (int,int) nextPos)
+        public bool MoveAPiece(Piece piece, (int, int) nextPos)
         {
             Piece otherPiece = board[nextPos.Item1, nextPos.Item2];
             Player player = piece.Owner;
@@ -151,7 +151,7 @@ namespace Shogi.Model
             }
 
             return false;
-            
+
         }
 
         public List<(int, int)> GetEmptyCell()
@@ -162,7 +162,7 @@ namespace Shogi.Model
             {
                 for (int j = 0; j < size; j++)
                 {
-                    if (board[i,j] == null)
+                    if (board[i, j] == null)
                     {
                         emptyCells.Add((i, j));
                     }
@@ -174,7 +174,7 @@ namespace Shogi.Model
 
         public bool ParachuteAPiece(Piece piece, (int, int) parachutePos)
         {
-            if (GetEmptyCell().Contains(parachutePos) || !piece.Owner.PiecesInHand.Contains(piece))
+            if (!GetEmptyCell().Contains(parachutePos) || !piece.Owner.PiecesInHand.Contains(piece))
             {
                 return false;
             }
@@ -182,16 +182,17 @@ namespace Shogi.Model
             board[parachutePos.Item1, parachutePos.Item2] = piece;
             piece.Owner.PiecesInHand.Remove(piece);
             piece.Owner.PiecesOnBoard.Add(piece);
+            piece.Move(parachutePos);
 
             return true;
         }
 
-        public bool MoveAPiece((int,int) currentPos, (int,int) nextPos)
+        public bool MoveAPiece((int, int) currentPos, (int, int) nextPos)
         {
             Piece piece = this[currentPos.Item1, currentPos.Item2];
             if (piece != null)
             {
-               return MoveAPiece(piece, nextPos);
+                return MoveAPiece(piece, nextPos);
             }
 
             return false;

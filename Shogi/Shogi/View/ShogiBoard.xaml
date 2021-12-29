@@ -1,0 +1,158 @@
+﻿<UserControl x:Class="Shogi.View.ShogiBoard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Shogi.View"
+        Height="580" Width="1100"
+        mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <local:PieceToImageConverter x:Key="PieceToImageConverter"/>
+        <local:HandToRowsConverter x:Key="HandToRowsConverter"/>
+        <local:WinnerTextConverter x:Key="WinnerTextConverter"/>
+
+        <Style x:Key="WinStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Visibility" Value="Visible"/>
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Winner}" Value="">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style x:Key="UpgradeStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Visibility" Value="Hidden"/>
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CanUpgrade}" Value="True">
+                        <Setter Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PieceStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Background" Value="Transparent"/>
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSelected}" Value="true">
+                    <Setter Property="Background" Value="LightBlue"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding IsAvaibleMove}" Value="true">
+                    <Setter Property="Background" Value="LightGreen"/>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding IsAttackMove}" Value="true">
+                    <Setter Property="Background" Value="LightCoral"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Viewbox Stretch="Uniform">
+        <StackPanel Orientation="Horizontal">
+            <ItemsControl ItemsSource="{Binding GoteHand, Mode=OneWay}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="5"
+                                     Rows="{Binding DataContext.GoteHand,
+                                            RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}},
+                                            Converter={StaticResource HandToRowsConverter}}"
+                                     Width="240"
+                                     Margin="20, 20, 0, 20"
+                                     VerticalAlignment="Top"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Style="{StaticResource PieceStyle}"
+                                Command="{Binding DataContext.OnHandClicked,
+                                                  RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                CommandParameter="{Binding}">
+                            <Image Source="{Binding Mode=OneWay,
+                                            Converter={StaticResource PieceToImageConverter}}"/>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Grid>
+                <Border BorderBrush="Black" BorderThickness="0.5"
+                        Margin="20, 20, 20, 20">
+                    <ItemsControl ItemsSource="{Binding ObservableBoard, Mode=OneWay}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="9" Rows="9" 
+                                             Width="540" Height="540"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Black" BorderThickness="0.5">
+                                    <Button Style="{StaticResource PieceStyle}"
+                                            Command="{Binding DataContext.OnBoardClicked,
+                                                      RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding}">
+
+                                        <Image Source="{Binding Mode=OneWay,
+                                                        Converter={StaticResource PieceToImageConverter}}"/>
+                                    </Button>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+
+                <TextBlock Style="{StaticResource WinStyle}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="60"
+                           Text="{Binding Winner,
+                                  Converter={StaticResource WinnerTextConverter}}"/>
+            </Grid>
+
+            <DockPanel>
+                <Button DockPanel.Dock="Top"
+                        Margin="0, 20, 20, 0"
+                        Height="30"
+                        FontSize="20"
+                        Content="menu"
+                        Command="{Binding OnMenuClicked}"/>
+
+                <Button Style="{StaticResource UpgradeStyle}"
+                        DockPanel.Dock="Top"
+                        Margin="0, 15, 20, 0"
+                        Height="30"
+                        FontSize="20"
+                        Content="promote"
+                        Command="{Binding OnPromoteClicked}"/>
+
+                <ItemsControl DockPanel.Dock="Bottom" ItemsSource="{Binding SenteHand, Mode=OneWay}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="5"
+                                         Rows="{Binding DataContext.SenteHand, Converter={StaticResource HandToRowsConverter}, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                         Width="240"
+                                         Margin="0, 20, 20, 20"
+                                         VerticalAlignment="Bottom"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource PieceStyle}"
+                                    Command="{Binding DataContext.OnHandClicked, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                    CommandParameter="{Binding}">
+                                <Image Source="{Binding Converter={StaticResource PieceToImageConverter}, Mode=OneWay}"/>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
+        </StackPanel>
+    </Viewbox>
+</UserControl>

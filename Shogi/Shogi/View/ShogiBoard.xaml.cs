@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Shogi.View
 {
     /// <summary>
-    /// Logique d'interaction pour ShogiWindow.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class ShogiWindow : Window
+    public partial class ShogiBoard : UserControl
     {
-        public ShogiWindow()
+        public ShogiBoard()
         {
             InitializeComponent();
         }

@@ -36,7 +36,7 @@ namespace Shogi.Model
         private bool isPlaying;
         public bool IsPlaying
         {
-            get { return IsPlaying; }
+            get { return isPlaying; }
         }
 
         public Player(String _name, bool _isSente, bool _isPlaying)
@@ -50,7 +50,7 @@ namespace Shogi.Model
         }
 
 
-        public void hasPlayed()
+        public void HasPlayed()
         {
             isPlaying = !isPlaying;
         }

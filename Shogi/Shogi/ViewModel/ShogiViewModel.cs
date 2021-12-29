@@ -54,6 +54,22 @@ namespace Shogi.ViewModel
             }
         }
 
+        private bool isOnMenu = true;
+
+        public bool IsOnMenu
+        {
+            get
+            {
+                return isOnMenu;
+            }
+
+            set
+            {
+                isOnMenu = value;
+                OnPropertyChanged("IsOnMenu");
+            }
+        }
+
         private ObservableCollection<Cell> observableBoard;
 
         public ObservableCollection<Cell> ObservableBoard
@@ -102,6 +118,62 @@ namespace Shogi.ViewModel
             }
         }
 
+        private bool canUpgrade;
+
+        public bool CanUpgrade
+        {
+            get
+            {
+                return canUpgrade;
+            }
+
+            set
+            {
+                canUpgrade = value;
+                OnPropertyChanged("CanUpgrade");
+            }
+        }
+
+        private string winner = "";
+
+        public string Winner
+        {
+            get
+            {
+                return winner;
+            }
+
+            set
+            {
+                winner = value;
+                OnPropertyChanged("Winner");
+            }
+        }
+
+        public string CurrentPlayer
+        {
+            get
+            {
+                return sente.IsPlaying ? sente.Name : gote.Name;
+            }
+        }
+
+        public ICommand OnPlayClicked
+        {
+            get
+            {
+                return new RelayCommand(Init);
+            }
+        }
+
+        public ICommand OnMenuClicked
+        {
+            get
+            {
+                return new RelayCommand(o => IsOnMenu = true);
+            }
+        }
+
         public ICommand OnBoardClicked
         {
             get 
@@ -110,16 +182,35 @@ namespace Shogi.ViewModel
             }
         }
 
+        public ICommand OnHandClicked
+        {
+            get
+            {
+                return new RelayCommand(HandClicked);
+            }
+        }
+
+        public ICommand OnPromoteClicked
+        {
+            get
+            {
+                return new RelayCommand(PromoteClicked);
+            }
+        }
+
         private Player sente;
         private Player gote;
         private Board board;
 
-        private Cell selectedCell;
+        private Piece selectedPiece;
+        private bool selectedFromHand;
 
-        public ShogiViewModel()
+        public void Init(object sender)
         {
-            sente = new Player("Amir", true, true);
-            gote = new Player("Ulys", false, false);
+            IsOnMenu = false;
+
+            sente = new Player("sente", true, true);
+            gote = new Player("gote", false, false);
 
             board = new Board(sente, gote);
             InitBoard();
@@ -159,21 +250,8 @@ namespace Shogi.ViewModel
                 }
             }
 
-            List<Cell> uniqueSenteHand = sente.PiecesInHand
-                .GroupBy(p => p.PieceType)
-                .Select(g => g.FirstOrDefault())
-                .Select(p => (Cell)p)
-                .ToList();
-
-            SenteHand = new ObservableCollection<Cell>(uniqueSenteHand);
-
-            List<Cell> uniqueGoteHand = gote.PiecesInHand
-                .GroupBy(p => p.PieceType)
-                .Select(g => g.FirstOrDefault())
-                .Select(p => (Cell)p)
-                .ToList();
-
-            GoteHand = new ObservableCollection<Cell>(uniqueGoteHand);
+            SenteHand = new ObservableCollection<Cell>(sente.PiecesInHand.ConvertAll(p => (Cell) p));
+            GoteHand = new ObservableCollection<Cell>(gote.PiecesInHand.ConvertAll(p => (Cell)p));
 
             RefreshBoard();
         }
@@ -181,6 +259,20 @@ namespace Shogi.ViewModel
         private void ResetHighlight()
         {
             foreach (Cell cell in ObservableBoard)
+            {
+                cell.IsSelected = false;
+                cell.IsAvaibleMove = false;
+                cell.IsAttackMove = false;
+            }
+
+            foreach (Cell cell in SenteHand)
+            {
+                cell.IsSelected = false;
+                cell.IsAvaibleMove = false;
+                cell.IsAttackMove = false;
+            }
+
+            foreach (Cell cell in GoteHand)
             {
                 cell.IsSelected = false;
                 cell.IsAvaibleMove = false;
@@ -199,23 +291,42 @@ namespace Shogi.ViewModel
 
             if (cell.IsAvaibleMove || cell.IsAttackMove)
             {
-                board.MoveAPiece(selectedCell.Piece, (cell.Index / 9, cell.Index % 9));
+                if (selectedFromHand)
+                {
+                    board.ParachuteAPiece(selectedPiece, (cell.Index / 9, cell.Index % 9));
+                }
+                else
+                {
+                    board.MoveAPiece(selectedPiece, (cell.Index / 9, cell.Index % 9));
+                }
+
+                sente.HasPlayed();
+                gote.HasPlayed();
+                OnPropertyChanged("CurrentPlayer");
 
                 UpdateBoard();
                 ResetHighlight();
 
+                cell.IsSelected = true;
+
                 return;
             }
-
-            ResetHighlight();
 
             if (cell.Piece == null)
             {
                 return;
             }
 
+            if (!cell.Piece.Owner.IsPlaying)
+            {
+                return;
+            }
+
+            ResetHighlight();
+
             cell.IsSelected = true;
-            selectedCell = cell;
+            selectedPiece = cell.Piece;
+            selectedFromHand = false;
 
             Dictionary<string, List<(int, int)>> moves = cell.Piece.GetPossibleMove(board);
 
@@ -230,6 +341,47 @@ namespace Shogi.ViewModel
             }
 
             RefreshBoard();
+        }
+
+        private void HandClicked(object sender)
+        {
+            Cell cell = sender as Cell;
+
+            if (cell == null)
+            {
+                return;
+            }
+
+            if (cell.Piece == null)
+            {
+                return;
+            }
+
+            if (!cell.Piece.Owner.IsPlaying)
+            {
+                return;
+            }
+
+            ResetHighlight();
+
+            cell.IsSelected = true;
+            selectedPiece = cell.Piece;
+            selectedFromHand = true;
+
+            List<(int, int)> moves = board.GetEmptyCell();
+
+            foreach ((int, int) move in moves)
+            {
+                ObservableBoard[move.Item1 * 9 + move.Item2].IsAvaibleMove = true;
+            }
+
+            RefreshBoard();
+        }
+
+        private void PromoteClicked(object sender)
+        {
+            selectedPiece.Evolve();
+            UpdateBoard();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
