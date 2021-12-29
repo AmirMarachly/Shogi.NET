@@ -67,6 +67,16 @@ namespace Shogi.ViewModel
             {
                 isOnMenu = value;
                 OnPropertyChanged("IsOnMenu");
+                OnPropertyChanged("RandomPiece");
+            }
+        }
+
+        public PiecesType RandomPiece
+        {
+            get
+            {
+                Array pieces = Enum.GetValues(typeof(PiecesType));
+                return (PiecesType)pieces.GetValue(new Random().Next(pieces.Length));
             }
         }
 
@@ -157,19 +167,19 @@ namespace Shogi.ViewModel
             }
         }
 
-        public string CurrentPlayer
-        {
-            get
-            {
-                return sente.IsPlaying ? sente.Name : gote.Name;
-            }
-        }
-
         public ICommand OnPlayClicked
         {
             get
             {
                 return new RelayCommand(Init);
+            }
+        }
+
+        public ICommand OnQuitClicked
+        {
+            get
+            {
+                return new RelayCommand(o => App.Current.Shutdown());
             }
         }
 
@@ -214,13 +224,15 @@ namespace Shogi.ViewModel
 
         public void Init(object sender)
         {
-            IsOnMenu = false;
-
             sente = new Player("sente", true, true);
             gote = new Player("gote", false, false);
 
             board = new Board(sente, gote);
             InitBoard();
+
+            IsOnMenu = false;
+            CanPromote = false;
+            OnPropertyChanged("Winner");
         }
 
         private void RefreshBoard()
@@ -258,7 +270,7 @@ namespace Shogi.ViewModel
             }
 
             SenteHand = new ObservableCollection<Cell>(sente.PiecesInHand.ConvertAll(p => (Cell) p));
-            GoteHand = new ObservableCollection<Cell>(gote.PiecesInHand.ConvertAll(p => (Cell)p));
+            GoteHand = new ObservableCollection<Cell>(gote.PiecesInHand.ConvertAll(p => (Cell) p));
 
             RefreshBoard();
         }

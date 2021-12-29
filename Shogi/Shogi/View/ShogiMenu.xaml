@@ -4,22 +4,40 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Shogi.View"
-        Height="500" Width="500"
+        Height="600" Width="600"
         mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <local:PieceToImageConverter x:Key="PieceToImageConverter"/>
+    </UserControl.Resources>
 
     <DockPanel>
         <Button DockPanel.Dock="Bottom"
-                Content="play"
-                Height="50"
+                Content="quit"
+                Height="40"
                 Width="250"
                 FontSize="30"
                 Margin="0, 0, 0, 100"
+                Command="{Binding OnQuitClicked}"/>
+
+        <Button DockPanel.Dock="Bottom"
+                Content="play"
+                Height="40"
+                Width="250"
+                FontSize="30"
+                Margin="0, 0, 0, 20"
                 Command="{Binding OnPlayClicked}"/>
 
-        <TextBlock VerticalAlignment="Center"
+        <StackPanel Orientation="Horizontal">
+            <Image Source="{Binding RandomPiece,
+                            Converter={StaticResource PieceToImageConverter}}"
+                   Height="100"
+                   Margin="20, 20, 20, 20"/>
+            
+            <TextBlock VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    FontSize="100"
-                   Text="shōgi">
-        </TextBlock>
+                   Text="shōgi"/>
+        </StackPanel>
     </DockPanel>
 </UserControl>

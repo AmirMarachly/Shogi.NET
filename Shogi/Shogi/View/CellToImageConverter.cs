@@ -12,12 +12,21 @@ using static Shogi.ViewModel.ShogiViewModel;
 
 namespace Shogi.View
 {
-    class PieceToImageConverter : IValueConverter
+    class CellToImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            PiecesType piece = (PiecesType) value;
-            return $"/Shogi;component/Resources/{piece}Sente.png";
+            Cell cell = value as Cell;
+
+            if (cell != null)
+            {
+                if (cell.Piece != null)
+                {
+                    return $"/Shogi;component/Resources/{cell.Piece.PieceType}{(cell.Piece.Owner.IsSente ? "Sente" : "Gote")}.png";
+                }
+            }
+
+            return $"/Shogi;component/Resources/Empty.png";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
