@@ -9,6 +9,13 @@ namespace Shogi.Model
 {
     public class Player
     {
+
+        private Piece king;
+        public Piece King
+        {
+            get { return king; }
+            set { king = value; }
+        }
         private String name;
         public String Name
         {
@@ -55,7 +62,10 @@ namespace Shogi.Model
             isPlaying = !isPlaying;
         }
 
-
+        public bool hasLost()
+        {
+            return piecesOnBoard.Contains(king);
+        }
 
     }
 }

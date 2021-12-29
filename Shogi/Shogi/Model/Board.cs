@@ -82,11 +82,13 @@ namespace Shogi.Model
                             case 4:
                                 if (p.IsSente)
                                 {
-                                    board[i, j] = new Piece(PiecesType.Osho, p, (i, j));
+                                    p.King = new Piece(PiecesType.Osho, p, (i, j));
+                                    board[i, j] = p.King;
                                 }
                                 else
                                 {
-                                    board[i, j] = new Piece(PiecesType.Gyokusho, p, (i, j));
+                                    p.King = new Piece(PiecesType.Gyokusho, p, (i, j));
+                                    board[i, j] = p.King;
                                 }
                                 break;
                             default:
