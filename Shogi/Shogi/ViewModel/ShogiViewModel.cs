@@ -134,19 +134,26 @@ namespace Shogi.ViewModel
             }
         }
 
-        private string winner = "";
-
         public string Winner
         {
             get
             {
-                return winner;
-            }
+                if (IsOnMenu)
+                {
+                    return "";
+                }
 
-            set
-            {
-                winner = value;
-                OnPropertyChanged("Winner");
+                if (sente.HasLost())
+                {
+                    return gote.Name;
+                }
+
+                if (gote.HasLost())
+                {
+                    return sente.Name;
+                }
+
+                return "";
             }
         }
 
@@ -282,6 +289,11 @@ namespace Shogi.ViewModel
 
         private void BoardClicked(object sender)
         {
+            if (sente.HasLost() || gote.HasLost())
+            {
+                return;
+            }
+
             Cell cell = sender as Cell;
 
             if (cell == null)
@@ -307,8 +319,9 @@ namespace Shogi.ViewModel
                 UpdateBoard();
                 ResetHighlight();
 
-                cell.IsSelected = true;
+                OnPropertyChanged("Winner");
 
+                cell.IsSelected = true;
                 return;
             }
 

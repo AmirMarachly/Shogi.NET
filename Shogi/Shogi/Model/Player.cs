@@ -62,10 +62,9 @@ namespace Shogi.Model
             isPlaying = !isPlaying;
         }
 
-        public bool hasLost()
+        public bool HasLost()
         {
-            return piecesOnBoard.Contains(king);
+            return !piecesOnBoard.Contains(king);
         }
-
     }
 }
