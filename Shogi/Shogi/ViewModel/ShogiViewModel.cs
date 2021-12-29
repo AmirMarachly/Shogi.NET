@@ -340,8 +340,6 @@ namespace Shogi.ViewModel
                 return;
             }
 
-            CanPromote = false;
-
             if (cell.Piece == null)
             {
                 return;
@@ -356,7 +354,9 @@ namespace Shogi.ViewModel
 
             cell.IsSelected = true;
             selectedPiece = cell.Piece;
+
             selectedFromHand = false;
+            CanPromote = false;
 
             Dictionary<string, List<(int, int)>> moves = cell.Piece.GetPossibleMove(board);
 
@@ -412,6 +412,8 @@ namespace Shogi.ViewModel
         private void PromoteClicked(object sender)
         {
             selectedPiece.Evolve();
+
+            CanPromote = false;
             UpdateBoard();
         }
 
