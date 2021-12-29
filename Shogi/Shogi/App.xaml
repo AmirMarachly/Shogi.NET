@@ -22,11 +22,11 @@
 
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#C2C7FE"/>
+                    <Setter Property="Background" Value="LightBlue"/>
                 </Trigger>
 
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#D7DAFF"/>
+                    <Setter Property="Background" Value="LightCyan"/>
                 </Trigger>
             </Style.Triggers>
         </Style>

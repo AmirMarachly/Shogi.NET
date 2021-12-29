@@ -37,15 +37,15 @@
 
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsSelected}" Value="true">
-                    <Setter Property="Background" Value="#C2C7FE"/>
+                    <Setter Property="Background" Value="LightBlue"/>
                 </DataTrigger>
 
                 <DataTrigger Binding="{Binding IsAvaibleMove}" Value="true">
-                    <Setter Property="Background" Value="#C3FED4"/>
+                    <Setter Property="Background" Value="LightGreen"/>
                 </DataTrigger>
 
                 <DataTrigger Binding="{Binding IsAttackMove}" Value="true">
-                    <Setter Property="Background" Value="#FE8585"/>
+                    <Setter Property="Background" Value="LightCoral"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
