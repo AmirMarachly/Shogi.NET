@@ -125,6 +125,63 @@ namespace Shogi.Model.pieces
             return this;
         }
 
+        public List<(int,int)> GetPossibleParachute(Board board, Player oppent)
+        {
+
+            List<(int, int)> result = board.GetEmptyCell();
+
+            if (pieceType == PiecesType.Fuhyo || pieceType == PiecesType.Keima || pieceType == PiecesType.Kyosha)
+            {
+                foreach ((int, int) cell in result.ConvertAll(x => x))
+                {
+                    if ((cell.Item1 == 8 && owner.IsSente) || (cell.Item1 == 0 && !owner.IsSente))
+                    {
+                        result.Remove(cell);
+                    }
+                }
+            }
+
+            if (pieceType == PiecesType.Keima)
+            {
+                foreach ((int, int) cell in result.ConvertAll(x => x))
+                {
+                    if ((cell.Item1 == 7 && owner.IsSente) || (cell.Item1 == 1 && !owner.IsSente))
+                    {
+                        result.Remove(cell);
+                    }
+                }
+            }
+
+            if (pieceType == PiecesType.Fuhyo)
+            {
+                if (oppent.IsSente && result.Contains((oppent.King.Pos.Item1 + 1, oppent.King.Pos.Item2)))
+                {
+                    result.Remove((oppent.King.Pos.Item1 + 1, oppent.King.Pos.Item2));
+                }
+                else if(result.Contains((oppent.King.Pos.Item1 - 1, oppent.King.Pos.Item2)))
+                {
+                    result.Remove((oppent.King.Pos.Item1 - 1, oppent.King.Pos.Item2));
+                }
+
+                foreach (Piece piece in owner.PiecesOnBoard)
+                {
+                    if(piece.PieceType == PiecesType.Fuhyo && !piece.IsEvolved)
+                    {
+                        foreach ((int, int) cell in result.ConvertAll(x=>x))
+                        {
+                            if(cell.Item2 == piece.Pos.Item2)
+                            {
+                                result.Remove(cell);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            return result;
+        }
+
         public bool CanEvolve()
         {
             if (owner.IsSente)
@@ -144,5 +201,7 @@ namespace Shogi.Model.pieces
 
             return false;
         }
+
+
     }
 }
