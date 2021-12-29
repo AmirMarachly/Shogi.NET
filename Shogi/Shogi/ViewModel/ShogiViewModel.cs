@@ -118,19 +118,19 @@ namespace Shogi.ViewModel
             }
         }
 
-        private bool canUpgrade;
+        private bool canPromote;
 
-        public bool CanUpgrade
+        public bool CanPromote
         {
             get
             {
-                return canUpgrade;
+                return canPromote;
             }
 
             set
             {
-                canUpgrade = value;
-                OnPropertyChanged("CanUpgrade");
+                canPromote = value;
+                OnPropertyChanged("CanPromote");
             }
         }
 
@@ -303,18 +303,21 @@ namespace Shogi.ViewModel
 
             if (cell.IsAvaibleMove || cell.IsAttackMove)
             {
+                (int, int) cellPos = (cell.Index / 9, cell.Index % 9);
+
                 if (selectedFromHand)
                 {
-                    board.ParachuteAPiece(selectedPiece, (cell.Index / 9, cell.Index % 9));
+                    board.ParachuteAPiece(selectedPiece, cellPos);
                 }
                 else
                 {
-                    board.MoveAPiece(selectedPiece, (cell.Index / 9, cell.Index % 9));
+                    CanPromote = selectedPiece.CanPromote(cellPos);
+                    board.MoveAPiece(selectedPiece, cellPos);
+                    selectedPiece.NeedPromote();
                 }
 
                 sente.HasPlayed();
                 gote.HasPlayed();
-                OnPropertyChanged("CurrentPlayer");
 
                 UpdateBoard();
                 ResetHighlight();
@@ -324,6 +327,8 @@ namespace Shogi.ViewModel
                 cell.IsSelected = true;
                 return;
             }
+
+            CanPromote = false;
 
             if (cell.Piece == null)
             {

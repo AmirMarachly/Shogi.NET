@@ -22,11 +22,11 @@
             </Style.Triggers>
         </Style>
         
-        <Style x:Key="UpgradeStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonStyle}">
+        <Style x:Key="PromoteStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonStyle}">
             <Setter Property="Visibility" Value="Hidden"/>
 
             <Style.Triggers>
-                <DataTrigger Binding="{Binding CanUpgrade}" Value="True">
+                <DataTrigger Binding="{Binding CanPromote}" Value="True">
                         <Setter Property="Visibility" Value="Visible"/>
                     </DataTrigger>
             </Style.Triggers>
@@ -123,7 +123,7 @@
                         Content="menu"
                         Command="{Binding OnMenuClicked}"/>
 
-                <Button Style="{StaticResource UpgradeStyle}"
+                <Button Style="{StaticResource PromoteStyle}"
                         DockPanel.Dock="Top"
                         Margin="0, 15, 20, 0"
                         Height="30"
