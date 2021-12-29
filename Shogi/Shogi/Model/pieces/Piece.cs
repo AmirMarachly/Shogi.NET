@@ -134,7 +134,7 @@ namespace Shogi.Model.pieces
             {
                 foreach ((int, int) cell in result.ConvertAll(x => x))
                 {
-                    if ((cell.Item1 == 8 && owner.IsSente) || (cell.Item1 == 0 && !owner.IsSente))
+                    if ((cell.Item1 == 0 && owner.IsSente) || (cell.Item1 == 8 && !owner.IsSente))
                     {
                         result.Remove(cell);
                     }
@@ -145,7 +145,7 @@ namespace Shogi.Model.pieces
             {
                 foreach ((int, int) cell in result.ConvertAll(x => x))
                 {
-                    if ((cell.Item1 == 7 && owner.IsSente) || (cell.Item1 == 1 && !owner.IsSente))
+                    if ((cell.Item1 == 1 && owner.IsSente) || (cell.Item1 == 7 && !owner.IsSente))
                     {
                         result.Remove(cell);
                     }
@@ -165,7 +165,7 @@ namespace Shogi.Model.pieces
 
                 foreach (Piece piece in owner.PiecesOnBoard)
                 {
-                    if(piece.PieceType == PiecesType.Fuhyo && !piece.IsEvolved)
+                    if(piece.PieceType == PiecesType.Fuhyo)
                     {
                         foreach ((int, int) cell in result.ConvertAll(x=>x))
                         {
@@ -184,11 +184,11 @@ namespace Shogi.Model.pieces
 
         public bool CanPromote((int, int) nextPos)
         {
-            if (owner.IsSente && (nextPos.Item1 >= 6 || pos.Item1 >= 6))
+            if (owner.IsSente && (nextPos.Item1 <= 2 || pos.Item1 <= 2))
             {
                 return true;
             }
-            else if (!owner.IsSente && (nextPos.Item1 <= 2 || pos.Item1 <= 2))
+            else if (!owner.IsSente && (nextPos.Item1 >= 6 || pos.Item1 >= 6))
             {
                 return true;
             }
@@ -200,22 +200,6 @@ namespace Shogi.Model.pieces
         {
             if (owner.IsSente)
             {
-                if (pos.Item1 == 8)
-                {
-                    if (pieceType == PiecesType.Fuhyo || pieceType == PiecesType.Kyosha ||
-                        pieceType == PiecesType.Keima)
-                    {
-                        Evolve();
-                    }
-                }
-
-                if (pos.Item1 == 7 && pieceType == PiecesType.Keima)
-                {
-                    Evolve();
-                }
-            }
-            else
-            {
                 if (pos.Item1 == 0)
                 {
                     if (pieceType == PiecesType.Fuhyo || pieceType == PiecesType.Kyosha ||
@@ -226,6 +210,22 @@ namespace Shogi.Model.pieces
                 }
 
                 if (pos.Item1 == 1 && pieceType == PiecesType.Keima)
+                {
+                    Evolve();
+                }
+            }
+            else
+            {
+                if (pos.Item1 == 8)
+                {
+                    if (pieceType == PiecesType.Fuhyo || pieceType == PiecesType.Kyosha ||
+                        pieceType == PiecesType.Keima)
+                    {
+                        Evolve();
+                    }
+                }
+
+                if (pos.Item1 == 7 && pieceType == PiecesType.Keima)
                 {
                     Evolve();
                 }
