@@ -109,6 +109,7 @@
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
                            FontSize="60"
+                           IsHitTestVisible="False"
                            Text="{Binding Winner,
                                   Converter={StaticResource WinnerTextConverter}}"/>
             </Grid>
