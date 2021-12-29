@@ -368,7 +368,8 @@ namespace Shogi.ViewModel
             selectedPiece = cell.Piece;
             selectedFromHand = true;
 
-            List<(int, int)> moves = board.GetEmptyCell();
+            List<(int, int)> moves = cell.Piece.GetPossibleParachute(board,
+                    cell.Piece.Owner == sente ? gote : sente);
 
             foreach ((int, int) move in moves)
             {
