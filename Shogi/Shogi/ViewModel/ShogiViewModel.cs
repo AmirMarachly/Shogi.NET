@@ -325,7 +325,6 @@ namespace Shogi.ViewModel
                 {
                     CanPromote = selectedPiece.CanPromote(cellPos);
                     board.MoveAPiece(selectedPiece, cellPos);
-                    selectedPiece.NeedPromote();
                 }
 
                 sente.HasPlayed();

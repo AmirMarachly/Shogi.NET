@@ -184,57 +184,59 @@ namespace Shogi.Model.pieces
 
         public bool CanPromote((int, int) nextPos)
         {
-            if(pieceType != PiecesType.Osho && pieceType != PiecesType.Gyokusho && pieceType != PiecesType.Kinsho)
+            if (!isEvolved)
             {
-                if (owner.IsSente && (nextPos.Item1 <= 2 || pos.Item1 <= 2))
+                if (owner.IsSente)
                 {
-                    return true;
+                    if (nextPos.Item1 == 0)
+                    {
+                        if (pieceType == PiecesType.Fuhyo || pieceType == PiecesType.Kyosha ||
+                            pieceType == PiecesType.Keima)
+                        {
+                            Evolve();
+                            return false;
+                        }
+                    }
+
+                    if (nextPos.Item1 == 1 && pieceType == PiecesType.Keima)
+                    {
+                        Evolve();
+                        return false;
+                    }
                 }
-                else if (!owner.IsSente && (nextPos.Item1 >= 6 || pos.Item1 >= 6))
+                else
                 {
-                    return true;
+                    if (nextPos.Item1 == 8)
+                    {
+                        if (pieceType == PiecesType.Fuhyo || pieceType == PiecesType.Kyosha ||
+                            pieceType == PiecesType.Keima)
+                        {
+                            Evolve();
+                            return false;
+                        }
+                    }
+
+                    if (nextPos.Item1 == 7 && pieceType == PiecesType.Keima)
+                    {
+                        Evolve();
+                        return false;
+                    }
+                }
+
+                if (pieceType != PiecesType.Osho && pieceType != PiecesType.Gyokusho && pieceType != PiecesType.Kinsho)
+                {
+                    if (owner.IsSente && (nextPos.Item1 <= 2 || pos.Item1 <= 2))
+                    {
+                        return true;
+                    }
+                    else if (!owner.IsSente && (nextPos.Item1 >= 6 || pos.Item1 >= 6))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
         }
-
-        public void NeedPromote()
-        {
-            if (owner.IsSente)
-            {
-                if (pos.Item1 == 0)
-                {
-                    if (pieceType == PiecesType.Fuhyo || pieceType == PiecesType.Kyosha ||
-                        pieceType == PiecesType.Keima)
-                    {
-                        Evolve();
-                    }
-                }
-
-                if (pos.Item1 == 1 && pieceType == PiecesType.Keima)
-                {
-                    Evolve();
-                }
-            }
-            else
-            {
-                if (pos.Item1 == 8)
-                {
-                    if (pieceType == PiecesType.Fuhyo || pieceType == PiecesType.Kyosha ||
-                        pieceType == PiecesType.Keima)
-                    {
-                        Evolve();
-                    }
-                }
-
-                if (pos.Item1 == 7 && pieceType == PiecesType.Keima)
-                {
-                    Evolve();
-                }
-            }
-            
-        }
-
 
     }
 }
