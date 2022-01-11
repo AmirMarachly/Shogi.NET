@@ -17,9 +17,17 @@
                 Height="40"
                 Width="250"
                 FontSize="30"
-                Margin="0, 0, 0, 100"
+                Margin="0, 0, 0, 80"
                 Command="{Binding OnQuitClicked}"/>
 
+        <Button DockPanel.Dock="Bottom"
+                Content="rules"
+                Height="40"
+                Width="250"
+                FontSize="30"
+                Margin="0, 0, 0, 20"
+                Command="{Binding OnRulesClicked}"/>
+        
         <Button DockPanel.Dock="Bottom"
                 Content="play"
                 Height="40"

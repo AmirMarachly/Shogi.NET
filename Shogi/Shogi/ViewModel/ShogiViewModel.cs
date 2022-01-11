@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -188,6 +189,14 @@ namespace Shogi.ViewModel
             get
             {
                 return new RelayCommand(o => IsOnMenu = true);
+            }
+        }
+
+        public ICommand OnRulesClicked
+        {
+            get
+            {
+                return new RelayCommand(o => Process.Start(new ProcessStartInfo("https://en.wikipedia.org/wiki/Shogi#Rules") { UseShellExecute = true }));
             }
         }
 
@@ -408,7 +417,9 @@ namespace Shogi.ViewModel
 
             cell.IsSelected = true;
             selectedPiece = cell.Piece;
+
             selectedFromHand = true;
+            CanPromote = false;
 
             List<(int, int)> moves = cell.Piece.GetPossibleParachute(board,
                     cell.Piece.Owner == sente ? gote : sente);
