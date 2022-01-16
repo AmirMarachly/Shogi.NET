@@ -12,8 +12,19 @@ using static Shogi.ViewModel.ShogiViewModel;
 
 namespace Shogi.View
 {
+    /// <summary>
+    /// Converter to display the winner
+    /// </summary>
     class WinnerTextConverter : IValueConverter
     {
+        /// <summary>
+        /// Convert the winner name to the display string
+        /// </summary>
+        /// <param name="value">The winner name</param>
+        /// <param name="targetType">Not used</param>
+        /// <param name="parameter">Not used</param>
+        /// <param name="culture">Not used</param>
+        /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string winner = value as string;
@@ -26,6 +37,14 @@ namespace Shogi.View
             return "";
         }
 
+        /// <summary>
+        /// Convert back the display string to the name. NOT IMPLEMENTED!
+        /// </summary>
+        /// <param name="value">Not used</param>
+        /// <param name="targetType">Not used</param>
+        /// <param name="parameter">Not used</param>
+        /// <param name="culture">Not used</param>
+        /// <returns></returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

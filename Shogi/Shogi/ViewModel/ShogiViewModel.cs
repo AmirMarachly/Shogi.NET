@@ -15,8 +15,14 @@ using System.Windows.Input;
 
 namespace Shogi.ViewModel
 {
+    /// <summary>
+    /// The viewmodel for the shogi
+    /// </summary>
     public class ShogiViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Simple class representing a cell of the grid
+        /// </summary>
         public class Cell
         {
             public Piece Piece
@@ -231,7 +237,11 @@ namespace Shogi.ViewModel
         private Piece selectedPiece;
         private bool selectedFromHand;
 
-        public void Init(object sender)
+        /// <summary>
+        /// (Re)initilaize the boards and the players
+        /// </summary>
+        /// <param name="parameter">The paramater of the call</param>
+        public void Init(object parameter)
         {
             sente = new Player("sente", true, true);
             gote = new Player("gote", false, false);
@@ -244,6 +254,9 @@ namespace Shogi.ViewModel
             OnPropertyChanged("Winner");
         }
 
+        /// <summary>
+        /// Refresh the board and the hands
+        /// </summary>
         private void RefreshBoard()
         {
             CollectionViewSource.GetDefaultView(ObservableBoard).Refresh();
@@ -251,6 +264,9 @@ namespace Shogi.ViewModel
             CollectionViewSource.GetDefaultView(GoteHand).Refresh();
         }
 
+        /// <summary>
+        /// Init the board and the hands
+        /// </summary>
         private void InitBoard()
         {
             ObservableBoard = new();
@@ -268,6 +284,9 @@ namespace Shogi.ViewModel
             RefreshBoard();
         }
 
+        /// <summary>
+        /// Update the board and the hands according to the model
+        /// </summary>
         private void UpdateBoard()
         {
             for (int i = 0; i < 9; ++i)
@@ -284,6 +303,9 @@ namespace Shogi.ViewModel
             RefreshBoard();
         }
 
+        /// <summary>
+        /// Reset all the highlights of the cells
+        /// </summary>
         private void ResetHighlight()
         {
             foreach (Cell cell in ObservableBoard)
@@ -308,14 +330,18 @@ namespace Shogi.ViewModel
             }
         }
 
-        private void BoardClicked(object sender)
+        /// <summary>
+        /// Function called when the board is clicked
+        /// </summary>
+        /// <param name="parameter">The parameter of the call</param>
+        private void BoardClicked(object parameter)
         {
             if (sente.HasLost() || gote.HasLost())
             {
                 return;
             }
 
-            Cell cell = sender as Cell;
+            Cell cell = parameter as Cell;
 
             if (cell == null)
             {
@@ -389,14 +415,18 @@ namespace Shogi.ViewModel
             RefreshBoard();
         }
 
-        private void HandClicked(object sender)
+        /// <summary>
+        /// Function called when the hand is clicked
+        /// </summary>
+        /// <param name="parameter">The parameter of the call</param>
+        private void HandClicked(object parameter)
         {
             if (sente.HasLost() || gote.HasLost())
             {
                 return;
             }
 
-            Cell cell = sender as Cell;
+            Cell cell = parameter as Cell;
 
             if (cell == null)
             {
@@ -432,7 +462,11 @@ namespace Shogi.ViewModel
             RefreshBoard();
         }
 
-        private void PromoteClicked(object sender)
+        /// <summary>
+        /// Function called when the promote button is clicked
+        /// </summary>
+        /// <param name="parameter">The parameter of the call</param>
+        private void PromoteClicked(object parameter)
         {
             selectedPiece.Evolve();
 
@@ -440,8 +474,15 @@ namespace Shogi.ViewModel
             UpdateBoard();
         }
 
+        /// <summary>
+        /// The event raised when a property change
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Raise the event associated to the name of the property
+        /// </summary>
+        /// <param name="name">The name of the property</param>
         public void OnPropertyChanged(string name)
         {
             if (PropertyChanged != null)
