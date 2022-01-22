@@ -8,7 +8,7 @@ namespace Shogi.Model.pieces.move
 {
     class KinshoMove : IMove
     {
-        public List<(int, int)> EvolvedMove((int, int) startPos, Board board, bool isSente)
+        public List<(int, int)> PromotedMove((int, int) startPos, Board board, bool isSente)
         {
             throw new NotImplementedException();
         }

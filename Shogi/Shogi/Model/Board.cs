@@ -47,6 +47,11 @@ namespace Shogi.Model
             Init(p1, p2);
         }
 
+        /// <summary>
+        /// Init the board with placing every piece it
+        /// </summary>
+        /// <param name="p1">The Sente player</param>
+        /// <param name="p2">The Goto player</param>
         public void Init(Player p1, Player p2)
         {
             Player p = p2;
@@ -131,6 +136,12 @@ namespace Shogi.Model
 
         }
 
+        /// <summary>
+        /// Move a piece of the board
+        /// </summary>
+        /// <param name="piece">The piece that will be moved</param>
+        /// <param name="nextPos">The next position of the piece</param>
+        /// <returns>True if every things works good, false otherwise</returns>
         public bool MoveAPiece(Piece piece, (int, int) nextPos)
         {
             Piece otherPiece = board[nextPos.Item1, nextPos.Item2];
@@ -156,6 +167,10 @@ namespace Shogi.Model
 
         }
 
+        /// <summary>
+        /// Get every cell that don't contains a piece
+        /// </summary>
+        /// <returns>The list of all empty cell</returns>
         public List<(int, int)> GetEmptyCell()
         {
             List<(int, int)> emptyCells = new List<(int, int)>();
@@ -174,6 +189,12 @@ namespace Shogi.Model
             return emptyCells;
         }
 
+        /// <summary>
+        /// Parachute a piece on the board
+        /// </summary>
+        /// <param name="piece">The piece that will be parachuted</param>
+        /// <param name="parachutePos">The parachuted position</param>
+        /// <returns>True if every things works good, false otherwise</returns>
         public bool ParachuteAPiece(Piece piece, (int, int) parachutePos)
         {
             if (!GetEmptyCell().Contains(parachutePos) || !piece.Owner.PiecesInHand.Contains(piece))
@@ -187,86 +208,6 @@ namespace Shogi.Model
             piece.Move(parachutePos);
 
             return true;
-        }
-
-        public bool MoveAPiece((int, int) currentPos, (int, int) nextPos)
-        {
-            Piece piece = this[currentPos.Item1, currentPos.Item2];
-            if (piece != null)
-            {
-                return MoveAPiece(piece, nextPos);
-            }
-
-            return false;
-        }
-
-
-        public Player CheckCheckmate()
-        {
-            Piece osho = p1.PiecesOnBoard.Where(p => p.PieceType == PiecesType.Osho)
-                                         .FirstOrDefault();
-            Piece gyokusho = p2.PiecesOnBoard.Where(p => p.PieceType == PiecesType.Gyokusho)
-                                         .FirstOrDefault();
-
-            bool oshoIsCheckmate = true;
-            bool gyokushoIsCheckmate = true;
-
-            Dictionary<string, List<(int, int)>> tmp;
-
-            tmp = osho.GetPossibleMove(this);
-
-            List<(int, int)> oshoPossibleMove = tmp["availableMove"];
-            oshoPossibleMove.AddRange(tmp["attackMove"]);
-            oshoPossibleMove.Add(osho.Pos);
-
-            tmp = gyokusho.GetPossibleMove(this);
-
-            List<(int, int)> gyokushoPossibleMove = tmp["availableMove"];
-            gyokushoPossibleMove.AddRange(tmp["attackMove"]);
-            gyokushoPossibleMove.Add(gyokusho.Pos);
-
-            List<(int, int)> allMovePossible = new List<(int, int)>();
-            foreach (Piece piece in osho.Owner.PiecesOnBoard)
-            {
-                tmp = piece.GetPossibleMove(this);
-                allMovePossible.AddRange(tmp["availableMove"]);
-            }
-
-            foreach ((int,int) coor in gyokushoPossibleMove)
-            { 
-                if (!allMovePossible.Contains(coor))
-                {
-                    gyokushoIsCheckmate = false;
-                    break;
-                }
-            }
-
-            allMovePossible.Clear();
-            foreach (Piece piece in osho.Owner.PiecesOnBoard)
-            {
-                tmp = piece.GetPossibleMove(this);
-                allMovePossible.AddRange(tmp["availableMove"]);
-            }
-
-            foreach ((int, int) coor in oshoPossibleMove)
-            {
-                if (!allMovePossible.Contains(coor))
-                {
-                    oshoIsCheckmate = false;
-                    break;
-                }
-            }
-
-            if(oshoIsCheckmate)
-            {
-                return osho.Owner;
-            }
-            else if (gyokushoIsCheckmate)
-            {
-                return gyokusho.Owner;
-            }
-
-            return null;
         }
     }
 }

@@ -468,7 +468,7 @@ namespace Shogi.ViewModel
         /// <param name="parameter">The parameter of the call</param>
         private void PromoteClicked(object parameter)
         {
-            selectedPiece.Evolve();
+            selectedPiece.Promote();
 
             CanPromote = false;
             UpdateBoard();
