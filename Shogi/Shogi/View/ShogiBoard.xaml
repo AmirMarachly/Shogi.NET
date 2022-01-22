@@ -27,8 +27,8 @@
 
             <Style.Triggers>
                 <DataTrigger Binding="{Binding CanPromote}" Value="True">
-                        <Setter Property="Visibility" Value="Visible"/>
-                    </DataTrigger>
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
 
@@ -70,7 +70,7 @@
                     <DataTemplate>
                         <Button Style="{StaticResource PieceStyle}"
                                 Command="{Binding DataContext.OnHandClicked,
-                                                  RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                          RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                 CommandParameter="{Binding}">
                             <Image Source="{Binding Converter={StaticResource CellToImageConverter}}"/>
                         </Button>
