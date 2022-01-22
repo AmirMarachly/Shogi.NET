@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Shogi.Model.pieces
 {
+    /// <summary>
+    /// This enum define all piece name it's use to know what <see cref="IMove"/> child class will be use to define the possible move of a piece
+    /// </summary>
     public enum PiecesType
     {
         Osho,

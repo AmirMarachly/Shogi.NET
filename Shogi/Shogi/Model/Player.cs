@@ -56,12 +56,18 @@ namespace Shogi.Model
             piecesInHand = new List<Piece>();
         }
 
-
+        /// <summary>
+        /// Has to be called when the player has played
+        /// </summary>
         public void HasPlayed()
         {
             isPlaying = !isPlaying;
         }
 
+        /// <summary>
+        /// Called to check if the player has lost
+        /// </summary>
+        /// <returns></returns>
         public bool HasLost()
         {
             return !piecesOnBoard.Contains(king);

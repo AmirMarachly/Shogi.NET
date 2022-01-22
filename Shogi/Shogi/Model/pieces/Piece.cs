@@ -16,11 +16,11 @@ namespace Shogi.Model.pieces
             get { return pieceType; }
         }
 
-        private bool isEvolved;
-        public bool IsEvolved
+        private bool isPromoted;
+        public bool IsPromoted
         {
-            get { return isEvolved; }
-            set { isEvolved = value; }
+            get { return isPromoted; }
+            set { isPromoted = value; }
         }
 
         private Player owner;
@@ -35,10 +35,10 @@ namespace Shogi.Model.pieces
             get { return pos; }
         }
 
-        public Piece(PiecesType _type, Player _owner, (int, int) _pos, bool _isEvolved = false)
+        public Piece(PiecesType _type, Player _owner, (int, int) _pos, bool _isPromoted = false)
         {
             pieceType = _type;
-            isEvolved = _isEvolved;
+            isPromoted = _isPromoted;
             owner = _owner;
             pos = _pos;
             string typeMove = pieceType.ToString() + "Move";
@@ -50,18 +50,23 @@ namespace Shogi.Model.pieces
             owner.PiecesOnBoard.Add(this);
         }
 
+        /// <summary>
+        /// Get all possible move in the current state of the board game
+        /// </summary>
+        /// <param name="board">the current board of the game</param>
+        /// <returns>A dictionary of two list that contains every availble move and every attack move from the <see cref="IMove.Move"/> or <see cref="IMove.PromotedMove"/></returns>
         public Dictionary<string, List<(int, int)>> GetPossibleMove(Board board)
         {
 
             List<(int, int)> possibleMove;
 
-            if (!isEvolved)
+            if (!isPromoted)
             {
                 possibleMove = move.Move(pos, board, owner.IsSente);
             }
             else
             {
-                possibleMove = move.EvolvedMove(pos, board, owner.IsSente);
+                possibleMove = move.PromotedMove(pos, board, owner.IsSente);
             }
             
             List<(int, int)> avaibleMove = possibleMove.ConvertAll(move => move);
@@ -95,36 +100,54 @@ namespace Shogi.Model.pieces
             return returnDict;
         }
 
+        /// <summary>
+        /// Change the the value of <see cref="pos"/> 
+        /// </summary>
+        /// <param name="newPos">The new position value</param>
         public void Move((int, int) newPos) => pos = newPos;
 
         public void HasBeenEat(Player p)
         {
             owner.PiecesOnBoard.Remove(this);
             owner = p;
-            owner.PiecesInHand.Add(this.Unevolved());
+            owner.PiecesInHand.Add(this.UnPromote());
         }
 
-        public Piece Unevolved()
+        /// <summary>
+        /// Unpromote the piece
+        /// </summary>
+        /// <returns>This piece</returns>
+        public Piece UnPromote()
         {
-            if (isEvolved)
+            if (isPromoted)
             {
                 pieceType = (PiecesType)((int)pieceType - 8);
-                isEvolved = !isEvolved;
+                isPromoted = !isPromoted;
             }
             return this;
         }
 
-        public Piece Evolve()
+        /// <summary>
+        /// Promote the piece
+        /// </summary>
+        /// <returns>This piece</returns>
+        public Piece Promote()
         {
-            if (!isEvolved)
+            if (!isPromoted)
             {
                 pieceType = (PiecesType)((int)pieceType + 8);
-                isEvolved = !isEvolved;
+                isPromoted = !isPromoted;
 
             }
             return this;
         }
 
+        /// <summary>
+        /// Get every cell where the piece can be parachute
+        /// </summary>
+        /// <param name="board">The currente board of the game</param>
+        /// <param name="opponnent">The opponnent player</param>
+        /// <returns>A List of every cell where the piece can be parachute</returns>
         public List<(int,int)> GetPossibleParachute(Board board, Player opponnent)
         {
 
@@ -182,9 +205,14 @@ namespace Shogi.Model.pieces
             return result;
         }
 
+        /// <summary>
+        /// Check if the piece is allow to be promote with the next move
+        /// </summary>
+        /// <param name="nextPos">The next value of <see cref="pos"/></param>
+        /// <returns>True if the piece is allow to promote, otherwise return false</returns>
         public bool CanPromote((int, int) nextPos)
         {
-            if (!isEvolved)
+            if (!isPromoted)
             {
                 if (owner.IsSente)
                 {
@@ -193,14 +221,14 @@ namespace Shogi.Model.pieces
                         if (pieceType == PiecesType.Fuhyo || pieceType == PiecesType.Kyosha ||
                             pieceType == PiecesType.Keima)
                         {
-                            Evolve();
+                            Promote();
                             return false;
                         }
                     }
 
                     if (nextPos.Item1 == 1 && pieceType == PiecesType.Keima)
                     {
-                        Evolve();
+                        Promote();
                         return false;
                     }
                 }
@@ -211,14 +239,14 @@ namespace Shogi.Model.pieces
                         if (pieceType == PiecesType.Fuhyo || pieceType == PiecesType.Kyosha ||
                             pieceType == PiecesType.Keima)
                         {
-                            Evolve();
+                            Promote();
                             return false;
                         }
                     }
 
                     if (nextPos.Item1 == 7 && pieceType == PiecesType.Keima)
                     {
-                        Evolve();
+                        Promote();
                         return false;
                     }
                 }

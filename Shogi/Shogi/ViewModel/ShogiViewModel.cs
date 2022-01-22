@@ -423,7 +423,7 @@ namespace Shogi.ViewModel
 
         private void PromoteClicked(object sender)
         {
-            selectedPiece.Evolve();
+            selectedPiece.Promote();
 
             CanPromote = false;
             UpdateBoard();

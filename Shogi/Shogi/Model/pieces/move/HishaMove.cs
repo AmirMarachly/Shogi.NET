@@ -8,7 +8,7 @@ namespace Shogi.Model.pieces.move
 {
     class HishaMove : IMove
     {
-        public List<(int, int)> EvolvedMove((int, int) startPos, Board board, bool isSente)
+        public List<(int, int)> PromotedMove((int, int) startPos, Board board, bool isSente)
         {
             List<(int, int)> result = Move(startPos, board, isSente);
 
